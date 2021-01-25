@@ -34,14 +34,94 @@
           <div class="box-hd">
             <div class="title">秒杀</div>
           </div>
-          <div class="box-bd">
-            <div class="promo-list">
-              <router-link to>
-                <img :src="$target +'public/imgs/phone/phone.png'" />
-              </router-link>
-            </div>
-            <div class="list">
-              <MyList :list="phoneList" :isMore="true"></MyList>
+          <div class="box-sd">
+            <div class="home-promotion">
+              <ul class="flash-promotion-list" >
+                <!-- <div class="home-brand-data">
+                  <li><a target="_blank" href="https://www.mi.com/buy/detail?product_id=10000244"><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8a43378b96501d7e227a9018fe2668c5.jpg?w=632&h=340" alt=""></a></li> 
+                </div> -->
+                <div class="flash-promotion-data">
+                  <li>
+                    <div class="flashsale-countdown">
+                      <div class="round">14:00 场</div>
+                      <img src="" alt="小米闪购">
+                      <div class="desc">距离结束还有</div>
+                      <div class="countdown clearfix">
+                        <span>00</span><i>:</i><span>43</span><i>:</i><span>02</span>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                 <div class="flash-promotion-data">
+                  <li>
+                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                      <div class="content">
+                        <div class="thumb">
+                          <img alt="米家激光投影电视 150英寸 白色" width="160" height="160" data-src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" lazy="loaded">
+                        </div>
+                        <h3 class="title">米家激光投影电视 150英寸 白色</h3>
+                        <p class="desc">超短焦，在家看巨幕</p>
+                        <p class="price">
+                          <span>7999</span>元 <del>9999元</del>
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+                 <div class="flash-promotion-data">
+                  <li>
+                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                      <div class="content">
+                        <div class="thumb">
+                          <img alt="米家激光投影电视 150英寸 白色" width="160" height="160" data-src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" lazy="loaded">
+                        </div>
+                        <h3 class="title">米家激光投影电视 150英寸 白色</h3>
+                        <p class="desc">超短焦，在家看巨幕</p>
+                        <p class="price">
+                          <span>7999</span>元 <del>9999元</del>
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+                 <div class="flash-promotion-data">
+                  <li>
+                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                      <div class="content">
+                        <div class="thumb">
+                          <img alt="米家激光投影电视 150英寸 白色" width="160" height="160" data-src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" lazy="loaded">
+                        </div>
+                        <h3 class="title">米家激光投影电视 150英寸 白色</h3>
+                        <p class="desc">超短焦，在家看巨幕</p>
+                        <p class="price">
+                          <span>7999</span>元 <del>9999元</del>
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+                 <div class="flash-promotion-data">
+                  <li>
+                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                      <div class="content">
+                        <div class="thumb">
+                          <img alt="米家激光投影电视 150英寸 白色" width="160" height="160" data-src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" src="//cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/36a259edf1be7ee1bba9648dd84287b6.png?thumb=1&amp;w=200&amp;h=200" lazy="loaded">
+                        </div>
+                        <h3 class="title">米家激光投影电视 150英寸 白色</h3>
+                        <p class="desc">超短焦，在家看巨幕</p>
+                        <p class="price">
+                          <span>7999</span>元 <del>9999元</del>
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+                
+
+                <!-- <div class="home-brand-data" v-for="item in brandList" :key="item.id">
+                  <li><a target="_blank" href="https://www.mi.com/buy/detail?product_id=10000244"><img :src="item.bigPic" :alt="item.name"></a></li> 
+                </div> -->
+              </ul>
             </div>
           </div>
         </div>
@@ -263,7 +343,7 @@ export default {
 .home-brand-list {
   display:flex;
   justify-content:space-between;
-   flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .home-brand-data {
   margin-top: 6px;
@@ -284,5 +364,114 @@ export default {
 .home-brand-list li img:hover{
   opacity: 0.8;
   transform: scale(1.2);
+}
+
+.home-promotion {
+  
+}
+.flash-promotion-list {
+  display:flex;
+  justify-content:space-between;
+  flex-wrap: wrap;
+}
+.flash-promotion-data {
+  /* margin-top: 6px; */
+}
+.flash-promotion-data li {
+    width: 234px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-color: #00c0a5;
+    text-align: center;
+    background: #fff;
+    -webkit-transition: all .6s;
+    transition: all .6s;
+    position: relative;
+    list-style: none;
+}
+
+.flash-promotion-data li a{
+    display: block;
+    height: 300px;
+    padding-top: 39px;
+    position: relative;
+}
+.flashsale-countdown{
+    height: 300px;
+    padding-top: 39px;
+    /* border-top-width: 1px;
+    border-top-style: solid;
+    border-color: #e53935; */
+    background: #f1eded;
+    text-align: center;
+}
+.flashsale-countdown .round{
+    font-size: 21px;
+    color: #ef3a3b;
+    padding-top: 15px;
+}
+.flashsale-countdown img{
+    margin: 25px auto;
+}
+.flashsale-countdown .desc {
+    color: rgba(0,0,0,.54);
+    font-size: 15px;
+}
+.flashsale-countdown .countdown {
+    width: 168px;
+    margin: 28px auto 0;
+}
+.flashsale-countdown .countdown span {
+    width: 46px;
+    height: 46px;
+    background: #605751;
+    color: #fff;
+    font-size: 24px;
+    line-height: 46px;
+    float: left;
+}
+.flashsale-countdown .countdown i {
+    width: 15px;
+    float: left;
+    height: 46px;
+    line-height: 46px;
+    color: #605751;
+    font-size: 28px;
+    font-style: normal;
+}
+
+.flash-promotion-data li a .thumb{
+    display: block;
+    width: 160px;
+    margin: 0 auto 22px;
+}
+.flash-promotion-data li a .thumb img{
+    width: 160px;
+    height: 160px;
+}
+.flash-promotion-data li a .title{
+    margin: 0 20px 3px;
+    font-size: 14px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    color: #212121;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.flash-promotion-data li a .desc{
+    height: 18px;
+    margin: 0 20px 12px;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    color: #b0b0b0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.flash-promotion-data li a .price{
+    margin: 0;
+    color: #ff6709;
+}
+.flash-promotion-data li a .price del {
+    color: #b0b0b0;
 }
 </style>
