@@ -1,9 +1,7 @@
 <!--
  * @Description: 首页组件
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 13:36:12
+ * @Author: leixiaotian
+ * @Date: 2021-01-25 16:23:00
  -->
 <template>
   <div class="home" id="home" name="home">
@@ -16,8 +14,39 @@
       </el-carousel>
     </div>
     <!-- 轮播图END -->
+
+    <!-- 品牌推荐 -->
+    <div class="block">
+      <div class="home-brand">
+        <ul class="home-brand-list" >
+          <div class="home-brand-data" v-for="item in brandList" :key="item.id">
+            <li><a target="_blank" href="https://www.mi.com/buy/detail?product_id=10000244"><img :src="item.bigPic" :alt="item.name"></a></li> 
+          </div>
+        </ul>
+      </div>
+    </div>
+    <!-- 品牌推荐end -->
+
     <div class="main-box">
       <div class="main">
+         <!-- 秒杀活动 -->
+        <div class="phone">
+          <div class="box-hd">
+            <div class="title">秒杀</div>
+          </div>
+          <div class="box-bd">
+            <div class="promo-list">
+              <router-link to>
+                <img :src="$target +'public/imgs/phone/phone.png'" />
+              </router-link>
+            </div>
+            <div class="list">
+              <MyList :list="phoneList" :isMore="true"></MyList>
+            </div>
+          </div>
+        </div>
+        <!-- 秒杀活动END -->
+
         <!-- 手机商品展示区域 -->
         <div class="phone">
           <div class="box-hd">
@@ -99,10 +128,12 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 export default {
   data() {
     return {
       carousel: "", // 轮播图数据
+      brandList: [], //品牌推荐
       phoneList: "", // 手机商品列表
       miTvList: "", // 小米电视商品列表
       applianceList: "", // 家电商品列表
@@ -182,6 +213,7 @@ export default {
       "accessoryList",
       "/api/product/getHotProduct"
     );
+    this.getHomeContent()
   },
   methods: {
     // 获取家电模块子组件传过来的数据
@@ -205,10 +237,52 @@ export default {
         .catch(err => {
           return Promise.reject(err);
         });
-    }
+    },
+    //获取首页内容
+     getHomeContent() {
+      const params = new URLSearchParams()
+      params.append('pageSize', 10)
+      params.append('pageIndex', 1)
+
+      request.get('/home/content', params).then((res) => {
+        const { code, data } = res
+        if (code === 200) {
+          this.brandList = data.brandList
+          console.log('response brandList is:', this.brandList)
+        }
+      })
+    },
   }
 };
 </script>
 <style scoped>
 @import "../assets/css/index.css";
+.home-brand {
+  margin-top: 14px;
+}
+.home-brand-list {
+  display:flex;
+  justify-content:space-between;
+   flex-wrap: wrap;
+}
+.home-brand-data {
+  margin-top: 6px;
+}
+
+.home-brand-list li{
+   overflow: hidden;
+   width: 300px;
+}
+
+.home-brand-list li img{
+   display: block;
+   width: 300px;
+   height: 170px;
+   -webkit-transition: all 0.5s;
+}
+
+.home-brand-list li img:hover{
+  opacity: 0.8;
+  transform: scale(1.2);
+}
 </style>
