@@ -9,7 +9,7 @@
    雷小米商城，一个基于微服务架构的前后端分离商城系统
 </p>
 <p align="center">
-<a target="_blank" href="https://gitee.com/moxi159753/mogu_blog_v2">
+<a target="_blank" href="https://github.com/leiphp/mall-store-web">
     	<img src="https://img.shields.io/hexpm/l/plug.svg" ></img>
 		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
         <img src="https://img.shields.io/badge/springboot-2.2.2.RELEASE-green" ></img>
