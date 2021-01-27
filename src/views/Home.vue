@@ -73,9 +73,17 @@ Kc+/jyFrblyKCIkKbnPjSkT8HDGV5saVyBAtVHZz40Ik7HNTRtrcuBARF2tQbW5ciCR0mhvbIs2E
 cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
 7x4iTALjhcgVQSIl3v87w5vePcY/AQYAFYR6skFSqBUAAAAASUVORK5CYII=" alt="小米闪购">
                       <div class="desc">距离结束还有</div>
-                      <div class="countdown clearfix">
+                      <count-down v-on:start_callback="countDownS_cb(1)" class="countdown"
+                        v-on:end_callback="countDownE_cb(1)"
+                        :currentTime= "new Date().getTime()" 
+                        :startTime="startTime"
+                        :endTime="endTime"
+                        :hourTxt="':'" :minutesTxt="':'" :secondsTxt="''"
+                        >
+                      </count-down>
+                     <!-- <div class="countdown clearfix">
                         <span>00</span><i>:</i><span>43</span><i>:</i><span>02</span>
-                      </div>
+                      </div> -->
                     </div>
                   </li>
                 </div>             
@@ -199,9 +207,14 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
 </template>
 <script>
 import request from '@/utils/request'
+import CountDown from 'vue2-countdown'
 export default {
+  components: {
+    CountDown
+  },
   data() {
     return {
+      value: "", //今天日期
       carousel: "", // 轮播图数据
       brandList: [], //品牌推荐
       promotionList: {}, //秒杀活动
@@ -214,7 +227,9 @@ export default {
       protectingShellList: "", // 保护套商品列表
       chargerList: "", //充电器商品列表
       applianceActive: 1, // 家电当前选中的商品分类
-      accessoryActive: 1 // 配件当前选中的商品分类
+      accessoryActive: 1, // 配件当前选中的商品分类
+      startTime: new Date('2021/01/27 10:00:00').getTime(), //剩余开始时间
+      endTime: new Date('2021/01/27 17:50:00').getTime() //剩余结束时间
     };
   },
   watch: {
@@ -260,6 +275,8 @@ export default {
     }
   },
   created() {
+    //获取今天日期
+    this.dateToday(),
     // 获取轮播图数据
     // this.$axios
     //   .post("/api/resources/carousel", {})
@@ -321,7 +338,10 @@ export default {
           this.carousel = data.advertiseList  // 获取轮播图数据
           this.brandList = data.brandList     // 获取品牌数据
           this.promotionList = data.homeFlashPromotion // 获取秒杀数据
-          console.log('response brandList is:', this.brandList)
+          var startTimeStr = this.dateFormat(data.homeFlashPromotion.startTime)
+          var endtimeStr = this.dateFormat(data.homeFlashPromotion.endTime)
+          this.startTime = new Date(this.value+' '+startTimeStr).getTime()
+          this.endTime = new Date(this.value+' '+endtimeStr).getTime()
         }
       })
     },
@@ -340,11 +360,22 @@ export default {
       // 拼接
       // return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
       return hours+":"+minutes;
-    }
+    },
+    dateToday() {
+      var aData = new Date();
+      this.value = aData.getFullYear() + "-" + (aData.getMonth() + 1) + "-" + aData.getDate();
+    },
+    countDownS_cb(value) {
+      console.log('callBack--'+value+'--开始倒计时结束回调');
+    },
+    countDownE_cb(value) {
+      console.log('callBack--'+value+'--活动剩余倒计时结束回调');
+    if(this.endTime <= 0) return
+    },
   }
 };
 </script>
-<style scoped>
+<style lang="scss" type="text/scss" rel="stylesheet/scss" scope>
 @import "../assets/css/index.css";
 .home-brand {
   margin-top: 14px;
@@ -455,10 +486,9 @@ export default {
     font-size: 15px;
 }
 .flashsale-countdown .countdown {
-    width: 168px;
-    margin: 28px auto 0;
-}
-.flashsale-countdown .countdown span {
+  width: 168px;
+  margin: 28px auto 0;
+  span {
     width: 46px;
     height: 46px;
     background: #605751;
@@ -466,8 +496,8 @@ export default {
     font-size: 24px;
     line-height: 46px;
     float: left;
-}
-.flashsale-countdown .countdown i {
+  }
+  i {
     width: 15px;
     float: left;
     height: 46px;
@@ -475,6 +505,7 @@ export default {
     color: #605751;
     font-size: 28px;
     font-style: normal;
+  }
 }
 
 .flash-promotion-data li a .thumb{
