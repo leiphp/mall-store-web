@@ -1,46 +1,75 @@
-# Store（参考小米商城）
+# mall-store-web（参考小米商城）
 
-## 前言
+<p align=center>
+  <a href="http://mall.100txy.com">
+    <img src="https://www.100txy.com/static/images/favicon.ico" alt="雷小米商城" style="width:200px;height:200px">
+  </a>
+</p>
+<p align=center>
+   雷小米商城，一个基于微服务架构的前后端分离商城系统
+</p>
+<p align="center">
+<a target="_blank" href="https://gitee.com/moxi159753/mogu_blog_v2">
+    	<img src="https://img.shields.io/hexpm/l/plug.svg" ></img>
+		<img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
+        <img src="https://img.shields.io/badge/springboot-2.2.2.RELEASE-green" ></img>
+<img src="https://img.shields.io/badge/SpringCloud-Hoxton.RELEASE-brightgreen" ></img><img src="https://img.shields.io/badge/vue-2.5.17-green" ></img>
+<img src="https://img.shields.io/badge/swagger-3.0.0-brightgreen" ></img>
+<img src="https://img.shields.io/badge/mybatis--plus-3.1.2-green" ></img>
+</a></p>
 
-2020年寒假尤其特殊，因为新型冠状病毒肺炎疫情，学校至今没有开学。想起上学期利用课余时间学习了`Vue.js`、`Node.js`，一直想做个完整的项目实战一下，但之前在学校并没有那么多的时间。现在恰好有时间，就想着做一个项目巩固之前学到的东西。
 
-思来想去，最后决定模仿 [小米商城 ](www.mi.com)做一个电商项目。可能时间隔得有点久了，之前学的东西很多都差不多忘记了，做这个项目基本上都是看着官方的文档一点一点做的。在家里也免不了有各种各样的事情耽误了项目的进度。现在终于差不多做好了，分享出来，新手上路，如有错误，请多多指教。
+[项目介绍](#项目介绍) | [站点演示](#站点演示) | [项目特点](#项目特点) | [技术架构](#技术选型) | [项目目录](#项目目录) | [项目文档](#项目文档)  | [快速开始](#快速开始) | [视频教程](#视频教程)| [项目截图](#移动端截图) | [更新记录](https://gitee.com/moxi159753/mogu_blog_v2/releases) | [笔记仓库](https://gitee.com/moxi159753/LearningNotes)
+
+##  前言
+
+前段时间搞活动在腾讯云买的云服务器一直搁置，没有找到合适的项目。思来想去决定部署一个微服务商城项目，把这个服务器用起来，也把一些项目中用到的知识点串起来实践一下。微服务项目用的是这个**mall-swarm**，这个项目的前端只有小程序，而且现在还没有开源出来，最后决定自己写一个适配**mall-portal**接口的web端项目。
 
 ## 说明
+> 本项目基于开源[Vue-Store ](https://github.com/hai-27/vue-store)项目做二次开发。
 
-> 本项目前后端分离，前端参考 [小米商城](www.mi.com) 实现，但与小米官方没有关系，纯属个人瞎搞，若需要购买小米产品请到小米官方商城。
+> 本项目前后端分离，前端参考 [小米商城](www.mi.com) 实现，但与小米官方没有关系。
 
-> 这是本项目的前端，后端请移步到[store-server](https://github.com/hai-27/store-server) 。
+> 本项目已经部署在腾讯云，没有兼容移动端，请使用电脑访问。
 
-> 前端已经部署在阿里云，欢迎访问 [http://106.15.179.105/](http://106.15.179.105/) （没有兼容移动端，请使用电脑访问）。
+> 本项目商城端所有实际消费的商品为测试商品，不做发货处理，请知悉后再支付测试。
 
-> 后端也已经部署在阿里云，接口地址已经修改为线上地址，本地运行前端也可以正常访问后端。
-
-> 本人在读本科大三，今年暑假即将开始实习，后面的时间可能没有那么的自由，但会不定期的更新完善该项目，如有问题请直接在 Issues 中提。
+> 本项目将不定期持续的更新完善所有界面和功能，如有问题请直接在 Issues 中提。
 
 > 如果觉得这个项目还不错，您可以点右上角 `Star`支持一下， 谢谢！ ^_^
 
 
-**更新说明:** 项目源代码仓库在Github，此处会同步特定版本，想了解最新版本请移步[https://github.com/hai-27/vue-store](https://github.com/hai-27/vue-store)
+
+## 项目介绍
+
+雷小米商城( **mall-store-web** )，一个模仿 [小米商城 ](www.mi.com)的电商web项目，服务端采用Spring Cloud Hoxton & Alibaba微服务部署。一个完全为**mall-swarm**微服务项目开发的web商城项目，你不需要改**mall-swarm**的任何代码就可以无缝对接。当然以后会根据个人的需求修改做一些调整，现在目的就是快速对接**mall-portal**所有接口，让它能够跑起来。 
+
+前端包含了11个页面：首页、登录、注册、全部商品、商品详情页、关于我们、我的收藏、购物车、订单结算页面、我的订单以及错误处理页面。  
+
+实现了品牌展示、商品秒杀、商品的展示、商品分类查询、关键字搜索商品、商品详细信息展示、登录、注册、用户购物车、订单结算、用户订单、用户收藏列表以及错误处理功能。
+
+该项目会持续更新，感兴趣的小伙伴可以跳转该仓库 [Star支持](https://github.com/leiphp/mall-store-web) 一下。
 
 
-## 项目简介
+## 站点演示
 
-本项目前后端分离，前端基于`Vue`+`Vue-router`+`Vuex`+`Element-ui`+`Axios`，参考小米商城实现。后端基于`Node.js(Koa框架)`+`Mysql`实现。
+部署环境采用 **2核4G3M** 的服务器，所有服务采用docker容器部署 ，感兴趣的小伙伴可以参点击浏览~
 
-前端包含了11个页面：首页、登录、注册、全部商品、商品详情页、关于我们、我的收藏、购物车、订单结算页面、我的订单以及错误处理页面。
+> 【演示前端】：http://mall.100txy.com/
+>
+> 【演示后端】：http://shop.100txy.com/
+>
+> 【演示账号】：admin   123123
+>
+> 【小程序】待开发~
 
-实现了商品的展示、商品分类查询、关键字搜索商品、商品详细信息展示、登录、注册、用户购物车、订单结算、用户订单、用户收藏列表以及错误处理功能。
 
-后端采取了MVC模式，根据前端需要的数据分模块设计了相应的接口、控制层、数据持久层。后端传送地址[store-server](https://github.com/hai-27/store-server) 。
+## 项目地址
 
-## 技术栈
+目前项目托管在 **Gitee** 和 **Github** 平台上中，欢迎大家 **Star** 和 **Fork** 支持~
 
-- **前端：**`Vue`+`Vue-router`+`Vuex`+`Element-ui`+`Axios`
-
-- **后端：**`Node.js`、`Koa框架`
-
-- **数据库：**`Mysql`
+- Gitee地址：https://gitee.com/leixiaotain/mall-store-web
+- Github地址：https://github.com/leiphp/mall-store-web
 
 ## 功能模块
 
@@ -95,12 +124,13 @@
 
 - 后端接口地址已经修改为线上的地址，本地运行会直接分为我部署在服务器的后端。
 - 为了方便测试，数据库数据没有加密，注册时切记**不要使用自己的常用密码**。
-- 如果需要自己运行后端，请移步到[store-server](https://github.com/hai-27/store-server) clone后端项目，并修改前端的接口地址为您的服务器地址。
+- 如果需要自己运行后端，请修改前端的接口地址**baseURL**为您的服务器地址。
+- 秒杀时间倒计时bug，需要修改G:\github-test\vue-store\node_modules\vue2-countdown\lib\vue2-countdown.vue第134行把this.star改成this.current。
 
 ```
 1. Clone project
 
-git clone https://github.com/hai-27/vue-store.git
+git clone https://github.com/leiphp/mall-store-web
 
 2. Project setup
 
@@ -146,7 +176,9 @@ npm run build
 ![](https://images.gitee.com/uploads/images/2020/0317/154827_2399157d_6502229.png "register.png")
 
 
+## 致谢
 
-**作者** [hai-27](https://github.com/hai-27)
+项目起初参考了很多开源项目的解决方案，开源不易，感谢分享
 
-2020年3月8日
+- 感谢**hai-27**开源项目：[vue-store](https://github.com/hai-27/vue-store)
+- 感谢 **macrozheng** 开源项目：[mall-swarm](https://github.com/macrozheng/mall-swarm)
