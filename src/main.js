@@ -104,6 +104,10 @@ import MyLogin from './components/MyLogin';
 Vue.component(MyLogin.name, MyLogin);
 import MyRegister from './components/MyRegister';
 Vue.component(MyRegister.name, MyRegister);
+import NewList from './components/NewList';
+Vue.component(NewList.name, NewList);
+import HotList from './components/HotList';
+Vue.component(HotList.name, HotList);
 
 Vue.config.productionTip = false;
 

@@ -125,6 +125,44 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
         </div>
         <!-- 秒杀活动END -->
 
+        <!-- 新鲜好物展示区域 -->
+        <div class="prolist">
+          <div class="box-hd">
+            <div class="title">新鲜好物</div>
+            <div class="more"><a href="//www.mi.com/a/h/14933.html" target="_blank" class="more-link" stat_exposure="true">查看全部<i data-v-57abdd9a="" class="el-icon-d-arrow-right"></i></a></div>
+          </div>
+          <div class="box-bd">
+            <div class="promo-list">
+              <router-link to>
+                <img :src="$target +'public/imgs/accessory/accessory-promo2.png'" />
+              </router-link>
+            </div>
+            <div class="list">
+              <NewList :list="newProductList" :isMore="false"></NewList>
+            </div>
+          </div>
+        </div>
+        <!-- 新鲜好物展示区域END -->
+
+        <!-- 人气推荐展示区域 -->
+        <div class="prolist">
+          <div class="box-hd">
+            <div class="title">人气推荐</div>
+            <div class="more"><a href="//www.mi.com/a/h/14933.html" target="_blank" class="more-link" stat_exposure="true">查看全部<i data-v-57abdd9a="" class="el-icon-d-arrow-right"></i></a></div>
+          </div>
+          <div class="box-bd">
+            <div class="promo-list">
+              <router-link to>
+                <img :src="$target +'public/imgs/accessory/accessory-promo2.png'" />
+              </router-link>
+            </div>
+            <div class="list">
+              <HotList :list="hotProductList" :isMore="false"></HotList>
+            </div>
+          </div>
+        </div>
+        <!-- 人气推荐展示区域END -->
+
         <!-- 手机商品展示区域 -->
         <div class="phone">
           <div class="box-hd">
@@ -218,6 +256,8 @@ export default {
       carousel: "", // 轮播图数据
       brandList: [], //品牌推荐
       promotionList: {}, //秒杀活动
+      newProductList: [], // 新鲜好物列表
+      hotProductList: [], // 新鲜好物列表
       phoneList: "", // 手机商品列表
       miTvList: "", // 小米电视商品列表
       applianceList: "", // 家电商品列表
@@ -342,6 +382,8 @@ export default {
           var endtimeStr = this.dateFormat(data.homeFlashPromotion.endTime)
           this.startTime = new Date(this.value+' '+startTimeStr).getTime()
           this.endTime = new Date(this.value+' '+endtimeStr).getTime()
+          this.newProductList = data.newProductList // 获取新鲜好物数据
+          this.hotProductList = data.hotProductList // 获取人气推荐数据
         }
       })
     },
@@ -541,5 +583,20 @@ export default {
 }
 .flash-promotion-data li a .price del {
     color: #b0b0b0;
+}
+.prolist {
+    .box-bd {
+      height: 300px;
+      .promo-list {
+        float: left;
+        height: 300px;
+        width: 234px;
+      }
+      .list {
+        float: left;
+        height: 300px;
+        width: 991px;
+      }
+    }
 }
 </style>
