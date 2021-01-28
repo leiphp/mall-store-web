@@ -134,7 +134,7 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
           <div class="box-bd">
             <div class="promo-list">
               <router-link to>
-                <img :src="$target +'public/imgs/accessory/accessory-promo2.png'" />
+                <img src="../assets/imgs/accessory-promo2.png" />
               </router-link>
             </div>
             <div class="list">
@@ -153,7 +153,7 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
           <div class="box-bd">
             <div class="promo-list">
               <router-link to>
-                <img :src="$target +'public/imgs/accessory/accessory-promo2.png'" />
+                <img src="../assets/imgs/accessory-promo2.png" />
               </router-link>
             </div>
             <div class="list">
@@ -239,6 +239,38 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
           </div>
         </div>
         <!-- 配件商品展示区域END -->
+
+        <!-- 主题推荐 -->
+        <!-- <div class="subjectlist" v-if="Object.keys(promotionList).length>0">
+          <div class="box-hd">
+            <div class="title">主题推荐</div>
+            <div class="more"><a href="//www.mi.com/a/h/14933.html" target="_blank" class="more-link" stat_exposure="true">查看全部<i data-v-57abdd9a="" class="el-icon-d-arrow-right"></i></a></div>
+          </div>
+          <div class="box-sd">
+            <div class="home-promotion">
+              <ul class="flash-promotion-list" >
+                 <div class="flash-promotion-data" v-for="item in promotionList.productList" :key="item.id">
+                  <li class="color1">
+                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                      <div class="content">
+                        <div class="thumb">
+                          <img :alt="item.name" width="160" height="160" :src="item.pic" lazy="loaded">
+                        </div>
+                        <h3 class="title">{{item.name}}</h3>
+                        <p class="desc">{{item.subTitle}}</p>
+                        <p class="price">
+                          <span>{{item.flashPromotionPrice}}</span>元 <del>{{item.originalPrice}}元</del>
+                        </p>
+                      </div>
+                    </a>
+                  </li>
+                </div>
+        
+              </ul>
+            </div>
+          </div>
+        </div> -->
+        <!-- 主题推荐END -->
       </div>
     </div>
   </div>
@@ -585,6 +617,21 @@ export default {
     color: #b0b0b0;
 }
 .prolist {
+    .box-bd {
+      height: 300px;
+      .promo-list {
+        float: left;
+        height: 300px;
+        width: 234px;
+      }
+      .list {
+        float: left;
+        height: 300px;
+        width: 991px;
+      }
+    }
+}
+.subjectlist {
     .box-bd {
       height: 300px;
       .promo-list {
