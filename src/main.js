@@ -108,6 +108,8 @@ import NewList from './components/NewList';
 Vue.component(NewList.name, NewList);
 import HotList from './components/HotList';
 Vue.component(HotList.name, HotList);
+import GoodsList from './components/GoodsList';
+Vue.component(GoodsList.name, GoodsList);
 
 Vue.config.productionTip = false;
 
