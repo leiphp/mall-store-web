@@ -229,7 +229,7 @@ export default {
         const { code, data } = res
         if (code === 200) {
           this.product = data;
-          this.total = 35;
+          this.total = data.length;
          console.log("data is:",data)
         }
       })
