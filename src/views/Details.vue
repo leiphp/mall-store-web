@@ -10,7 +10,7 @@
     <!-- 头部 -->
     <div class="page-header">
       <div class="title">
-        <p>{{productDetails.product_name}}</p>
+        <p>{{productDetails.name}}</p>
         <div class="list">
           <ul>
             <li>
@@ -33,15 +33,15 @@
       <!-- 左侧商品轮播图 -->
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length>1">
-          <el-carousel-item v-for="item in productPicture" :key="item.id">
-            <img style="height:560px;" :src="$target + item.product_picture" :alt="item.intro" />
+          <el-carousel-item v-for="item in productPicture" :key="item.index">
+            <img style="height:560px;" :src="item" alt="" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPicture.length==1">
           <img
             style="height:560px;"
-            :src="$target + productPicture[0].product_picture"
-            :alt="productPicture[0].intro"
+            :src="productPicture[0]"
+            alt=""
           />
         </div>
       </div>
@@ -49,29 +49,30 @@
 
       <!-- 右侧内容区 -->
       <div class="content">
-        <h1 class="name">{{productDetails.product_name}}</h1>
-        <p class="intro">{{productDetails.product_intro}}</p>
+        <h1 class="name">{{productDetails.name}}</h1>
+        <p class="intro">{{productDetails.subTitle}}</p>
         <p class="store">小米自营</p>
         <div class="price">
-          <span>{{productDetails.product_selling_price}}元</span>
+          <span>{{productDetails.price}}元</span>
           <span
-            v-show="productDetails.product_price != productDetails.product_selling_price"
+            v-show="productDetails.originalPrice != productDetails.price"
             class="del"
-          >{{productDetails.product_price}}元</span>
+          >{{productDetails.originalPrice}}元</span>
         </div>
         <div class="pro-list">
-          <span class="pro-name">{{productDetails.product_name}}</span>
+          <span class="pro-name">{{productDetails.name}}</span>
           <span class="pro-price">
-            <span>{{productDetails.product_selling_price}}元</span>
+            <span>{{productDetails.price}}元</span>
             <span
-              v-show="productDetails.product_price != productDetails.product_selling_price"
+              v-show="productDetails.originalPrice != productDetails.price"
               class="pro-del"
-            >{{productDetails.product_price}}元</span>
+            >{{productDetails.originalPrice}}元</span>
           </span>
-          <p class="price-sum">总计 : {{productDetails.product_selling_price}}元</p>
+          <p class="price-sum">总计 : {{productDetails.price}}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
+          <!-- <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button> -->
           <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button>
           <el-button class="like" @click="addCollect">喜欢</el-button>
         </div>
@@ -96,9 +97,24 @@
       <!-- 右侧内容区END -->
     </div>
     <!-- 主要内容END -->
+    <div class="detail-banner">
+      <div class="container">
+        <ul>
+          <li  class="active"><a stat_exposure="true">商品详情</a></li>
+          <li  class=""><a stat_exposure="true">规格参数</a></li>
+          <li class=""><a stat_exposure="true">常见问题</a></li>
+        </ul>
+      </div>
+    </div>
+     <!-- 内容详情区 -->
+      <div class="detail" v-html="productDetails.detailHtml">
+          
+      </div>
+      <!-- 内容详情区END -->
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 import { mapActions } from "vuex";
 export default {
   data() {
@@ -119,24 +135,24 @@ export default {
     // 监听商品id的变化，请求后端获取商品数据
     productID: function(val) {
       this.getDetails(val);
-      this.getDetailsPicture(val);
+      // this.getDetailsPicture(val);
     }
   },
   methods: {
     ...mapActions(["unshiftShoppingCart", "addShoppingCartNum"]),
     // 获取商品详细信息
-    getDetails(val) {
-      this.$axios
-        .post("/api/product/getDetails", {
-          productID: val
-        })
-        .then(res => {
-          this.productDetails = res.data.Product[0];
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
-    },
+    // getDetails(val) {
+    //   this.$axios
+    //     .post("/api/product/getDetails", {
+    //       productID: val
+    //     })
+    //     .then(res => {
+    //       this.productDetails = res.data.Product[0];
+    //     })
+    //     .catch(err => {
+    //       return Promise.reject(err);
+    //     });
+    // },
     // 获取商品图片
     getDetailsPicture(val) {
       this.$axios
@@ -149,6 +165,20 @@ export default {
         .catch(err => {
           return Promise.reject(err);
         });
+    },
+    // 获取商品详细信息
+     getDetails(val) {
+      request.get('product/detail/'+val).then((res) => {
+        const { code, data } = res
+        if (code === 200) {
+          this.productDetails = res.data.product;
+          this.productPicture = res.data.product.albumPics.split(',')
+          console.log("piclist",this.productPicture)// ["1", "2"]
+          // this.product = data;
+          // this.total = data.length;
+         console.log("data is:",data)
+        }
+      })
     },
     // 加入购物车
     addShoppingCart() {
@@ -358,4 +388,27 @@ export default {
   color: #b0b0b0;
 }
 /* 主要内容CSS END */
+#details .detail {
+  float: left;
+  /* margin-left: 25px; */
+  /* width: 640px; */
+  text-align: center;
+}
+#details .detail-banner {
+    text-align: center;
+    padding: 10px 0;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    
+}
+#details .detail-banner li {
+    width: 168px;
+    height: 18px;
+    padding: 20px 0;
+    line-height: 18px;
+    text-align: center;
+    font-size: 18px;
+    color: #424242;
+    display: inline-block;
+}
 </style>
