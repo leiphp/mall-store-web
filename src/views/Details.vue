@@ -389,10 +389,9 @@ export default {
 }
 /* 主要内容CSS END */
 #details .detail {
-  float: left;
-  /* margin-left: 25px; */
-  /* width: 640px; */
+  width: 1225px;
   text-align: center;
+  margin: 0 auto;
 }
 #details .detail-banner {
     text-align: center;
