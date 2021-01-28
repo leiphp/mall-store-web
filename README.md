@@ -2,11 +2,11 @@
 
 <p align=center>
   <a href="http://mall.100txy.com">
-    <img src="https://www.100txy.com/static/images/favicon.ico" alt="雷小米商城" style="width:200px;height:200px">
+    <img src="https://www.100txy.com/static/images/favicon.ico" alt="雷小天商城" style="width:200px;height:200px">
   </a>
 </p>
 <p align=center>
-   雷小米商城，一个基于微服务架构的前后端分离商城系统
+   雷小天商城，一个基于微服务架构的前后端分离商城系统
 </p>
 <p align="center">
 <a target="_blank" href="https://github.com/leiphp/mall-store-web">
@@ -42,7 +42,7 @@
 
 ## 项目介绍
 
-雷小米商城( **mall-store-web** )，一个模仿 [小米商城 ](www.mi.com)的电商web项目，服务端采用Spring Cloud Hoxton & Alibaba微服务部署。一个完全为**mall-swarm**微服务项目开发的web商城项目，你不需要改**mall-swarm**的任何代码就可以无缝对接。当然以后会根据个人的需求修改做一些调整，现在目的就是快速对接**mall-portal**所有接口，让它能够跑起来。 
+雷小天商城( **mall-store-web** )，一个模仿 [小米商城 ](www.mi.com)的电商web项目，服务端采用Spring Cloud Hoxton & Alibaba微服务部署。一个完全为**mall-swarm**微服务项目开发的web商城项目，你不需要改**mall-swarm**的任何代码就可以无缝对接。当然以后会根据个人的需求修改做一些调整，现在目的就是快速对接**mall-portal**所有接口，让它能够跑起来。 
 
 前端包含了11个页面：首页、登录、注册、全部商品、商品详情页、关于我们、我的收藏、购物车、订单结算页面、我的订单以及错误处理页面。  
 
