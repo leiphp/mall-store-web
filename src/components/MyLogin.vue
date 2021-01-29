@@ -29,7 +29,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-
+import request from '@/utils/request'
 export default {
   name: "MyLogin",
   data() {
@@ -38,13 +38,13 @@ export default {
       if (!value) {
         return callback(new Error("请输入用户名"));
       }
-      // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
-      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
+      // 用户名以字母开头,长度在4-16之间,允许字母数字下划线
+      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{3,15}$/;
       if (userNameRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
-        return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
+        return callback(new Error("字母开头,长度4-16之间,允许字母数字下划线"));
       }
     };
     // 密码的校验方法
@@ -53,13 +53,14 @@ export default {
         return callback(new Error("请输入密码"));
       }
       // 密码以字母开头,长度在6-18之间,允许字母数字和下划线
-      const passwordRule = /^[a-zA-Z]\w{5,17}$/;
+      // const passwordRule = /^[a-zA-Z]\w{5,17}$/;
+      const passwordRule = /^[a-zA-Z0-9]\w{5,17}$/;
       if (passwordRule.test(value)) {
         this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
         return callback(
-          new Error("字母开头,长度6-18之间,允许字母数字和下划线")
+          new Error("不一定字母开头,长度6-18之间,允许字母数字和下划线")
         );
       }
     };
@@ -93,34 +94,59 @@ export default {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
+        console.log("valid",valid)
         if (valid) {
-          this.$axios
-            .post("/api/users/login", {
-              userName: this.LoginUser.name,
-              password: this.LoginUser.pass
-            })
-            .then(res => {
-              // “001”代表登录成功，其他的均为失败
-              if (res.data.code === "001") {
-                // 隐藏登录组件
+          const params = new URLSearchParams()
+          params.append('username', this.LoginUser.name)
+          params.append('password', this.LoginUser.pass)
+          request.post('/sso/login', params).then((res) => {
+            const { code, data, message } = res
+            if (code === 200) {
+              // 隐藏登录组件
                 this.isLogin = false;
                 // 登录信息存到本地
-                let user = JSON.stringify(res.data.user);
+                let user = JSON.stringify(data.token);
                 localStorage.setItem("user", user);
                 // 登录信息存到vuex
-                this.setUser(res.data.user);
+                this.setUser(data.token);
                 // 弹出通知框提示登录成功信息
-                this.notifySucceed(res.data.msg);
-              } else {
+                this.notifySucceed(message);
+                console.log("data is:",data)
+            }else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
                 // 弹出通知框提示登录失败信息
-                this.notifyError(res.data.msg);
-              }
-            })
-            .catch(err => {
-              return Promise.reject(err);
-            });
+                this.notifyError(message);
+            }
+          })
+
+          // this.$axios
+          //   .post("/api/users/login", {
+          //     userName: this.LoginUser.name,
+          //     password: this.LoginUser.pass
+          //   })
+          //   .then(res => {
+          //     // “001”代表登录成功，其他的均为失败
+          //     if (res.data.code === "001") {
+          //       // 隐藏登录组件
+          //       this.isLogin = false;
+          //       // 登录信息存到本地
+          //       let user = JSON.stringify(res.data.user);
+          //       localStorage.setItem("user", user);
+          //       // 登录信息存到vuex
+          //       this.setUser(res.data.user);
+          //       // 弹出通知框提示登录成功信息
+          //       this.notifySucceed(res.data.msg);
+          //     } else {
+          //       // 清空输入框的校验状态
+          //       this.$refs["ruleForm"].resetFields();
+          //       // 弹出通知框提示登录失败信息
+          //       this.notifyError(res.data.msg);
+          //     }
+          //   })
+          //   .catch(err => {
+          //     return Promise.reject(err);
+          //   });
         } else {
           return false;
         }
