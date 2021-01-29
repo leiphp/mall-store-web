@@ -24,9 +24,9 @@
         <el-tabs v-model="activeName" type="card">
           <el-tab-pane
             v-for="item in categoryList"
-            :key="item.category_id"
-            :label="item.category_name"
-            :name="''+item.category_id"
+            :key="item.id"
+            :label="item.name"
+            :name="''+item.id"
           />
         </el-tabs>
       </div>
@@ -125,7 +125,7 @@ export default {
     },
     // 监听分类id，响应相应的商品
     categoryID: function() {
-      // this.getData();
+      this.getData();
       this.search = "";
     },
     // 监听路由变化，更新路由传递了搜索条件
@@ -166,41 +166,67 @@ export default {
     },
     // 向后端请求分类列表数据
     getCategory() {
-      this.$axios
-        .post("/api/product/getCategory", {})
-        .then(res => {
+      // this.$axios
+      //   .post("/api/product/getCategory", {})
+      //   .then(res => {
+      //     const val = {
+      //       category_id: 0,
+      //       category_name: "全部"
+      //     };
+      //     const cate = res.data.category;
+      //     cate.unshift(val);
+      //     this.categoryList = cate;
+      //   })
+      //   .catch(err => {
+      //     return Promise.reject(err);
+      //   });
+      request.get('/home/productCateList/0').then((res) => {
+        const { code, data } = res
+        if (code === 200) {
           const val = {
-            category_id: 0,
-            category_name: "全部"
+            id: 0,
+            name: "全部"
           };
-          const cate = res.data.category;
+          const cate =data;
           cate.unshift(val);
           this.categoryList = cate;
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+         console.log("data is:",this.categoryList)
+        }
+      })
     },
     // 向后端请求全部商品或分类商品数据
     getData() {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
-      const api =
-        this.categoryID.length == 0
-          ? "/api/product/getAllProduct"
-          : "/api/product/getProductByCategory";
-      this.$axios
-        .post(api, {
-          categoryID: this.categoryID,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize
-        })
-        .then(res => {
-          this.product = res.data.Product;
-          this.total = res.data.total;
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+      // const api =
+      //   this.categoryID.length == 0
+      //     ? "/api/product/getAllProduct"
+      //     : "/api/product/getProductByCategory";
+      // this.$axios
+      //   .post(api, {
+      //     categoryID: this.categoryID,
+      //     currentPage: this.currentPage,
+      //     pageSize: this.pageSize
+      //   })
+      //   .then(res => {
+      //     this.product = res.data.Product;
+      //     this.total = res.data.total;
+      //   })
+      //   .catch(err => {
+      //     return Promise.reject(err);
+      //   });
+
+        const api =this.categoryID.length == 0
+          ? "/home/productCateList/0"
+          : "/home/productCateList/"+this.categoryID;
+      
+        request.get(api).then((res) => {
+        const { code, data } = res
+        if (code === 200) {
+          
+        //  this.product = data.Product;
+         console.log("data is:",data)
+        }
+      })
     },
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {
