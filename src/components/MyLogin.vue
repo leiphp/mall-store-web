@@ -105,8 +105,10 @@ export default {
               // 隐藏登录组件
                 this.isLogin = false;
                 // 登录信息存到本地
-                let user = JSON.stringify(data.token);
+                let user = JSON.stringify({userName:"test",user_id:1});
+                let token = JSON.stringify(data.token);
                 localStorage.setItem("user", user);
+                localStorage.setItem("token", token);
                 // 登录信息存到vuex
                 this.setUser(data.token);
                 // 弹出通知框提示登录成功信息

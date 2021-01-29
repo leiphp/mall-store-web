@@ -187,35 +187,71 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
-        .post("/api/user/shoppingCart/addShoppingCart", {
-          user_id: this.$store.getters.getUser.user_id,
-          product_id: this.productID
-        })
-        .then(res => {
-          switch (res.data.code) {
-            case "001":
-              // 新加入购物车成功
-              this.unshiftShoppingCart(res.data.shoppingCartData[0]);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "002":
-              // 该商品已经在购物车，数量+1
-              this.addShoppingCartNum(this.productID);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "003":
-              // 商品数量达到限购数量
-              this.dis = true;
-              this.notifyError(res.data.msg);
-              break;
-            default:
-              this.notifyError(res.data.msg);
-          }
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+      // const params = new URLSearchParams()
+      // params.append('id', this.productDetails.id)
+      // params.append('name', this.productDetails.name)
+      const params = {
+        memberId: 1,
+        productId: this.productDetails.id,
+        productSkuId: 10,
+        quantity: 1,
+        price: this.productDetails.price,
+        productPic: this.productDetails.pic,
+        productName: this.productDetails.name,
+        productSubTitle: this.productDetails.subTitle,
+        productSkuCode: "202002210036001",
+        productSn: this.productDetails.productSn,
+      }
+      request.post('/cart/add', params).then((res) => {
+        const { code, data, message } = res
+        if (code === 200) {
+          // 隐藏登录组件
+            this.isLogin = false;
+            // 登录信息存到本地
+            //let user = JSON.stringify(data.token);
+            //localStorage.setItem("user", user);
+            // 登录信息存到vuex
+            //this.setUser(data.token);
+            // 弹出通知框提示登录成功信息
+            this.notifySucceed(message);
+            console.log("cart add res is:",data)
+        }else {
+            // 清空输入框的校验状态
+            this.$refs["ruleForm"].resetFields();
+            // 弹出通知框提示登录失败信息
+            this.notifyError(message);
+        }
+      })
+
+      // this.$axios
+      //   .post("/api/user/shoppingCart/addShoppingCart", {
+      //     user_id: this.$store.getters.getUser.user_id,
+      //     product_id: this.productID
+      //   })
+      //   .then(res => {
+      //     switch (res.data.code) {
+      //       case "001":
+      //         // 新加入购物车成功
+      //         this.unshiftShoppingCart(res.data.shoppingCartData[0]);
+      //         this.notifySucceed(res.data.msg);
+      //         break;
+      //       case "002":
+      //         // 该商品已经在购物车，数量+1
+      //         this.addShoppingCartNum(this.productID);
+      //         this.notifySucceed(res.data.msg);
+      //         break;
+      //       case "003":
+      //         // 商品数量达到限购数量
+      //         this.dis = true;
+      //         this.notifyError(res.data.msg);
+      //         break;
+      //       default:
+      //         this.notifyError(res.data.msg);
+      //     }
+      //   })
+      //   .catch(err => {
+      //     return Promise.reject(err);
+      //   });
     },
     addCollect() {
       // 判断是否登录,没有登录则显示登录组件
