@@ -50,11 +50,11 @@
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$target + item.productImg" />
+              <img :src="item.productPic" />
               <span class="pro-name">{{item.productName}}</span>
-              <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
+              <span class="pro-price">{{item.price}}元 x {{item.quantity}}</span>
               <span class="pro-status"></span>
-              <span class="pro-total">{{item.price * item.num}}元</span>
+              <span class="pro-total">{{item.price * item.quantity}}元</span>
             </li>
           </ul>
         </div>
