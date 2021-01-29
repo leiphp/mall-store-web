@@ -1,9 +1,7 @@
 <!--
  * @Description: 我的购物车页面组件
- * @Author: hai-27
- * @Date: 2020-02-20 01:55:47
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 13:36:42
+ * @Author: leixiaotian
+ * @Date: 2021-01-29 22:55:47
  -->
 
 <template>
@@ -43,26 +41,26 @@
             <el-checkbox :value="item.check" @change="checkChange($event,index)"></el-checkbox>
           </div>
           <div class="pro-img">
-            <router-link :to="{ path: '/goods/details', query: {productID:item.productID} }">
-              <img :src="$target + item.productImg" />
+            <router-link :to="{ path: '/goods/details', query: {productID:item.productId} }">
+              <img :src="item.productPic" />
             </router-link>
           </div>
           <div class="pro-name">
             <router-link
-              :to="{ path: '/goods/details', query: {productID:item.productID} }"
+              :to="{ path: '/goods/details', query: {productID:item.productId} }"
             >{{item.productName}}</router-link>
           </div>
           <div class="pro-price">{{item.price}}元</div>
           <div class="pro-num">
             <el-input-number
               size="small"
-              :value="item.num"
-              @change="handleChange($event,index,item.productID)"
+              :value="item.quantity"
+              @change="handleChange($event,index,item.productId)"
               :min="1"
               :max="item.maxNum"
             ></el-input-number>
           </div>
-          <div class="pro-total pro-total-in">{{item.price*item.num}}元</div>
+          <div class="pro-total pro-total-in">{{item.price*item.quantity}}元</div>
           <div class="pro-action">
             <el-popover placement="right">
               <p>确定删除吗？</p>
@@ -70,7 +68,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  @click="deleteItem($event,item.id,item.productID)"
+                  @click="deleteItem($event,item.id,item.productId)"
                 >确定</el-button>
               </div>
               <i class="el-icon-error" slot="reference" style="font-size: 18px;"></i>

@@ -122,7 +122,7 @@
 <script>
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
-
+import request from '@/utils/request'
 export default {
   beforeUpdate() {
     this.activeIndex = this.$route.path;
@@ -165,22 +165,37 @@ export default {
         this.setShoppingCart([]);
       } else {
         // 用户已经登录,获取该用户的购物车信息
-        this.$axios
-          .post("/api/user/shoppingCart/getShoppingCart", {
-            user_id: val.user_id
-          })
-          .then(res => {
-            if (res.data.code === "001") {
-              // 001 为成功, 更新vuex购物车状态
-              this.setShoppingCart(res.data.shoppingCartData);
-            } else {
-              // 提示失败信息
-              this.notifyError(res.data.msg);
-            }
-          })
-          .catch(err => {
-            return Promise.reject(err);
-          });
+        // this.$axios
+        //   .post("/api/user/shoppingCart/getShoppingCart", {
+        //     user_id: val.user_id
+        //   })
+        //   .then(res => {
+        //     if (res.data.code === "001") {
+        //       // 001 为成功, 更新vuex购物车状态
+        //       this.setShoppingCart(res.data.shoppingCartData);
+        //     } else {
+        //       // 提示失败信息
+        //       this.notifyError(res.data.msg);
+        //     }
+        //   })
+        //   .catch(err => {
+        //     return Promise.reject(err);
+        //   });
+
+        request.get('/cart/list').then((res) => {
+          const { code, data, message } = res
+          if (code === 200) {
+              data.forEach(el=>{
+                  el.check = false
+              })
+              this.setShoppingCart(data);
+              console.log("cartdata is:",data)
+          }else {
+              // 弹出通知框提示登录失败信息
+              this.notifyError(message);
+          }
+        })
+
       }
     }
   },
