@@ -1,9 +1,7 @@
 <!--
  * @Description: 项目根组件
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-04-05 13:14:48
+ * @Author: leixiaotian
+ * @Date: 2021-01-29 23:23:00
  -->
 <template>
   <div id="app" name="app">
