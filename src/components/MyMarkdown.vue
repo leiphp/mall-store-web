@@ -65,9 +65,9 @@
 
 部署环境采用 **2核4G3M** 的服务器，所有服务采用docker容器部署 ，感兴趣的小伙伴可以参点击浏览~
 
-> 【演示前端】：http://mall.100txy.com/
+> 【演示前端】：http://shop.100txy.com/
 >
-> 【演示后端】：http://shop.100txy.com/
+> 【演示后端】：http://shop.100txy.com/admin
 >
 > 【演示账号】：test   123456
 >
