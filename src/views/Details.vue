@@ -174,6 +174,7 @@ export default {
           // console.log("piclist",this.productPicture)// ["1", "2"]
           // this.product = data;
           // this.total = data.length;
+          console.log("data is:",data)
         }
       })
     },
@@ -211,7 +212,7 @@ export default {
             //this.setUser(data.token);
             // 弹出通知框提示登录成功信息
             this.notifySucceed(message);
-            // console.log("cart add res is:",data)
+            console.log("cart add res is:",data)
         }else {
             // 清空输入框的校验状态
             this.$refs["ruleForm"].resetFields();
