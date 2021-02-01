@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 // 创建axios实例
 const service = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url
-  baseURL: "http://134.175.151.17:8201/mall-portal",
+  baseURL: "http://gw.100txy.com/mall-portal",
   timeout: 15000 // 请求超时时间
 })
 
