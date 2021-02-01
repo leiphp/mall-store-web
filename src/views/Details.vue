@@ -1,9 +1,7 @@
 <!--
  * @Description: 商品详情页面组件
- * @Author: hai-27
- * @Date: 2020-02-16 20:20:26
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-07 21:59:26
+ * @Author: leixiaotian
+ * @Date: 2021-02-01 20:20:26
  -->
 <template>
   <div id="details">
@@ -72,7 +70,7 @@
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
-          <!-- <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button> -->
+          <el-button class="shop-buy" :disabled="dis" @click="addShoppingBuy">立即购买</el-button>
           <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button>
           <el-button class="like" @click="addCollect">喜欢</el-button>
         </div>
@@ -393,6 +391,7 @@ export default {
 #details .main .content .button {
   height: 55px;
   margin: 10px 0 20px 0;
+  display: flex;
 }
 #details .main .content .button .el-button {
   float: left;
@@ -410,9 +409,17 @@ export default {
   background-color: #f25807;
 }
 
+#details .main .content .button .shop-buy {
+  width: 340px;
+  background-color: #ff054b;
+}
+#details .main .content .button .shop-buy:hover {
+  background-color: #ff054b;
+}
+
 #details .main .content .button .like {
-  width: 260px;
-  margin-left: 40px;
+  width: 300px;
+  margin-left: 10px;
   background-color: #b0b0b0;
 }
 #details .main .content .button .like:hover {

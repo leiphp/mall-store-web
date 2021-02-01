@@ -90,7 +90,7 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
 
                  <div class="flash-promotion-data" v-for="(item,key) in promotionList.productList" :key="item.id">
                   <li :class="'color'+key%5+' product'" v-if="key%5!=4">
-                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                    <router-link :to="{ path: '/goods/details', query: {productID:item.id} }">
                       <div class="content">
                         <div class="thumb">
                           <img :alt="item.name" width="160" height="160" :src="item.pic" lazy="loaded">
@@ -101,10 +101,10 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
                           <span>{{item.flashPromotionPrice}}</span>元 <del>{{item.originalPrice}}元</del>
                         </p>
                       </div>
-                    </a>
+                    </router-link>
                   </li>
                   <li :class="'color'+key%5" v-else>
-                    <a href="//www.mi.com/buy/seckill" target="_blank">
+                    <router-link :to="{ path: '/goods/details', query: {productID:item.id} }">
                       <div class="content">
                         <div class="thumb">
                           <img :alt="item.name" width="160" height="160" :src="item.pic" lazy="loaded">
@@ -115,7 +115,7 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
                           <span>{{item.flashPromotionPrice}}</span>元 <del>{{item.originalPrice}}元</del>
                         </p>
                       </div>
-                    </a>
+                    </router-link>
                   </li>
                 </div>
         
