@@ -12,16 +12,16 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  console.log("token",store.getters.token)
-  console.log("getUser",store.getters.getUser)
-  console.log("getToken",getToken())
+  // console.log("token",store.getters.token)
+  // console.log("getUser",store.getters.getUser)
+  // console.log("getToken",getToken())
   if (store.getters.getUser) {
     config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   return config
 }, error => {
   // Do something with request error
-  console.log(error) // for debug
+  //console.log(error) // for debug
   Promise.reject(error)
 })
 
@@ -57,7 +57,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error)// for debug
+    //console.log('err' + error)// for debug
     Message({
       message: error.message,
       type: 'error',

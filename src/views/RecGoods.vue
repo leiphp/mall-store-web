@@ -190,7 +190,6 @@ export default {
           const cate =data;
           cate.unshift(val);
           this.categoryList = cate;
-         console.log("data is:",this.categoryList)
         }
       })
     },
@@ -220,11 +219,10 @@ export default {
           : "/home/productCateList/"+this.categoryID;
       
         request.get(api).then((res) => {
-        const { code, data } = res
+        const { code} = res
         if (code === 200) {
           
         //  this.product = data.Product;
-         console.log("data is:",data)
         }
       })
     },
@@ -256,7 +254,7 @@ export default {
         if (code === 200) {
           this.product = data;
           this.total = data.length;
-         console.log("data is:",data)
+        //  console.log("data is:",data)
         }
       })
     },

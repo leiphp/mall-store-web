@@ -187,7 +187,6 @@ export default {
                   el.check = false
               })
               this.setShoppingCart(data);
-              console.log("cartdata is:",data)
           }else {
               // 弹出通知框提示登录失败信息
               this.notifyError(message);

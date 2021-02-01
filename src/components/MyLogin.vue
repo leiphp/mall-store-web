@@ -94,7 +94,6 @@ export default {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始登录
-        console.log("valid",valid)
         if (valid) {
           const params = new URLSearchParams()
           params.append('username', this.LoginUser.name)
@@ -113,7 +112,6 @@ export default {
                 this.setUser(data.token);
                 // 弹出通知框提示登录成功信息
                 this.notifySucceed(message);
-                console.log("data is:",data)
             }else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
