@@ -1,14 +1,13 @@
 <!--
- * @Description: 列表组件，用于首页、全部商品页面的商品列表
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-04-05 13:22:22
+ * @Description: 推荐商品页面的商品列表
+ * @Author: leixiaotian
+ * @Date: 2021-02-04 00:23:00
  -->
 <template>
-  <div id="myList" class="myList">
+  <div id="goodsList" class="myList">
     <ul>
-      <li v-for="item in list" :key="item.product_id">
+      <el-badge value="热门" class="item" v-for="item in list" :key="item.id">
+      <li>
         <el-popover placement="top">
           <p>确定删除吗？</p>
           <div style="text-align: right; margin: 10px 0 0">
@@ -29,8 +28,9 @@
           </p>
         </router-link>
       </li>
+      </el-badge>
       <li v-show="isMore && list.length>=1" id="more">
-        <router-link :to="{ path: '/goods' }">
+        <router-link :to="{ path: '/goods', query: {categoryID:categoryID} }">
           浏览更多
           <i class="el-icon-d-arrow-right"></i>
         </router-link>
@@ -40,7 +40,7 @@
 </template>
 <script>
 export default {
-  name: "MyList",
+  name: "RecGoodsList",
   // list为父组件传过来的商品列表
   // isMore为是否显示“浏览更多”
   props: ["list", "isMore", "isDelete"],
@@ -175,5 +175,9 @@ export default {
 }
 .myList ul li .delete:hover {
   color: #ff6700;
+}
+/deep/.item sup {
+  z-index: 99;
+  margin-right: 30px;
 }
 </style>

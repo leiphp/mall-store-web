@@ -6,7 +6,7 @@
 <template>
   <div id="newList" class="myList">
     <ul>
-      <el-badge value="new" class="item" v-for="item in list" :key="item.id">
+      <el-badge value="上新" class="item" v-for="item in list" :key="item.id">
       <li >
         <el-popover placement="top">
           <p>确定删除吗？</p>
