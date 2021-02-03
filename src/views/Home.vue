@@ -188,8 +188,8 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
             <div class="title">家电</div>
             <div class="more" id="more">
               <MyMenu :val="2" @fromChild="getChildMsg">
-                <span slot="1">热门</span>
-                <span slot="2">电视影音</span>
+                <span slot="1">电视影音</span>
+                <span slot="2">家用空调</span>
               </MyMenu>
             </div>
           </div>
@@ -214,12 +214,12 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
         <!-- 配件商品展示区域 -->
         <div class="accessory" id="promo-menu">
           <div class="box-hd">
-            <div class="title">配件</div>
+            <div class="title">手机数码</div>
             <div class="more" id="more">
               <MyMenu :val="3" @fromChild="getChildMsg2">
-                <span slot="1">热门</span>
+                <span slot="1">手机</span>
                 <span slot="2">保护套</span>
-                <span slot="3">充电器</span>
+                <span slot="3">手机配件</span>
               </MyMenu>
             </div>
           </div>
@@ -360,20 +360,13 @@ export default {
     //     return Promise.reject(err);
     //   });
     // 获取各类商品数据
-    this.getPromo("手机", "phoneList");
-    this.getPromo("电视机", "miTvList");
-    this.getPromo("保护套", "protectingShellList");
-    this.getPromo("充电器", "chargerList");
-    this.getPromo(
-      ["电视机", "空调", "洗衣机"],
-      "applianceList",
-      "/api/product/getHotProduct"
-    );
-    this.getPromo(
-      ["保护套", "保护膜", "充电器", "充电宝"],
-      "accessoryList",
-      "/api/product/getHotProduct"
-    );
+    this.getPromo("/product/categoryGoods/19", "phoneList", {params: {pageSize: 7,pageNum: 1}});//手机
+    this.getPromo("/product/categoryGoods/36", "miTvList",{params: {pageSize: 7,pageNum: 1}});//电视
+    this.getPromo("/product/categoryGoods/35", "applianceList",{params: {pageSize: 7,pageNum: 1}});//家用空调
+    this.getPromo("/product/categoryGoods/19", "accessoryList",{params: {pageSize: 7,pageNum: 1}});//手机
+    this.getPromo("/product/categoryGoods/32", "protectingShellList",{params: {pageSize: 7,pageNum: 1}});//保护套
+    this.getPromo("/product/categoryGoods/30", "chargerList",{params: {pageSize: 7,pageNum: 1}});//手机配件
+    
     this.getHomeContent()
   },
   methods: {
@@ -386,18 +379,26 @@ export default {
       this.accessoryActive = val;
     },
     // 获取各类商品数据方法封装
-    getPromo(categoryName, val, api) {
-      api = api != undefined ? api : "/api/product/getPromoProduct";
-      this.$axios
-        .post(api, {
-          categoryName
-        })
-        .then(res => {
-          this[val] = res.data.Product;
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+    // getPromo(categoryName, val, api) {
+    //   api = api != undefined ? api : "/api/product/getPromoProduct";
+    //   this.$axios
+    //     .post(api, {
+    //       categoryName
+    //     })
+    //     .then(res => {
+    //       this[val] = res.data.Product;
+    //     })
+    //     .catch(err => {
+    //       return Promise.reject(err);
+    //     });
+    // },
+    getPromo(url, val, params) {
+       request.get(url,params).then((res) => {
+        const { code,data} = res
+        if (code === 200) {
+          this[val] = data.list;
+        }
+      })
     },
     //获取首页内容
      getHomeContent() {
