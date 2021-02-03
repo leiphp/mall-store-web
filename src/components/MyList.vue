@@ -30,7 +30,7 @@
         </router-link>
       </li>
       <li v-show="isMore && list.length>=1" id="more">
-        <router-link :to="{ path: '/goods', query: {categoryID:categoryID} }">
+        <router-link :to="{ path: '/goods', query: {categoryID:0} }">
           浏览更多
           <i class="el-icon-d-arrow-right"></i>
         </router-link>

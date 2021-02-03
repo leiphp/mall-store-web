@@ -198,8 +198,8 @@ export default {
       
         request.get(api,{
         params: {
-          pageSize: 15,
-          pageNum: 1
+          pageSize: this.pageSize,
+          pageNum: this.currentPage
         }
       }).then((res) => {
         const { code,data} = res
