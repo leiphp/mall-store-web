@@ -129,7 +129,7 @@ cnNjWySh29zYFGnIK25KzY1Nkdziptzc2BKJUu7Qbm5sicQom2o3NzZEKqiu/DZpbmyIjIAHNBMZ
         <div class="prolist">
           <div class="box-hd">
             <div class="title">新鲜好物</div>
-            <div class="more"><a href="//www.mi.com/a/h/14933.html" target="_blank" class="more-link" stat_exposure="true">查看全部<i data-v-57abdd9a="" class="el-icon-d-arrow-right"></i></a></div>
+            <div class="more"><router-link :to="{ path: '/newgoods' }">查看全部<i data-v-57abdd9a="" class="el-icon-d-arrow-right"></i></router-link></div>
           </div>
           <div class="box-bd">
             <div class="promo-list">

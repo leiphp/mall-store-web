@@ -112,6 +112,8 @@ import GoodsList from './components/GoodsList';
 Vue.component(GoodsList.name, GoodsList);
 import RecGoodsList from './components/RecGoodsList';
 Vue.component(RecGoodsList.name, RecGoodsList);
+import NewGoodsList from './components/NewGoodsList';
+Vue.component(NewGoodsList.name, NewGoodsList);
 
 Vue.config.productionTip = false;
 

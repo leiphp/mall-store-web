@@ -19,7 +19,7 @@
     <!-- 主要内容区 -->
     <div class="main">
       <div class="list">
-        <RecGoodsList :list="product" v-if="product.length>0"></RecGoodsList>
+        <NewGoodsList :list="product" v-if="product.length>0"></NewGoodsList>
         <div v-else class="none-product">抱歉没有找到相关的商品，请看看其他的商品</div>
       </div>
       <!-- 分页 -->
@@ -76,7 +76,7 @@ export default {
     // 页码变化调用currentChange方法
     currentChange(currentPage) {
       this.currentPage = currentPage;
-      request.get('/home/hotProductList', {
+      request.get('/home/newProductList', {
         params: {
           pageSize: this.pageSize,
           pageNum: this.currentPage
@@ -93,7 +93,7 @@ export default {
     },
      //获取推荐商品内容
      getRecmmendGoods() {
-      request.get('/home/hotProductList', {
+      request.get('/home/newProductList', {
         params: {
           pageSize: this.pageSize,
           pageNum: this.currentPage
