@@ -13,6 +13,11 @@
         <el-breadcrumb-item v-if="search">搜索</el-breadcrumb-item>
         <el-breadcrumb-item v-else>分类</el-breadcrumb-item>
         <el-breadcrumb-item v-if="search">{{search}}</el-breadcrumb-item>
+        <el-breadcrumb-item >
+          <div class="parentcate">
+              <el-tag type="info" class="eltag" :class="key==pindex?'active':''" v-for="(item,key) in pcategoryList" :key="item.id" @click="childcate(key)">{{item.name}}</el-tag>
+          </div>
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 面包屑END -->
@@ -22,6 +27,7 @@
       <div class="product-nav">
         <div class="title">分类</div>
         <el-tabs v-model="activeName" type="card">
+          <el-tab-pane label="全部" name="0"></el-tab-pane>
           <el-tab-pane
             v-for="item in categoryList"
             :key="item.id"
@@ -59,6 +65,8 @@ import request from '@/utils/request'
 export default {
   data() {
     return {
+      pindex: 0,
+      pcategoryList: [],//树结构分类
       categoryList: "", //分类列表
       categoryID: [], // 分类id
       product: "", // 商品列表
@@ -72,9 +80,11 @@ export default {
   },
   created() {
     // 获取分类列表
-    this.getCategory();
+    // this.getCategory();
     //获取推荐商品
     this.getRecmmendGoods()
+    //获取商品树结构
+    this.getAllCateGoods()
   },
   activated() {
     this.activeName = "-1"; // 初始化分类列表当前选中的id为-1
@@ -165,64 +175,37 @@ export default {
       this.backtop();
     },
     // 向后端请求分类列表数据
-    getCategory() {
-      // this.$axios
-      //   .post("/api/product/getCategory", {})
-      //   .then(res => {
-      //     const val = {
-      //       category_id: 0,
-      //       category_name: "全部"
-      //     };
-      //     const cate = res.data.category;
-      //     cate.unshift(val);
-      //     this.categoryList = cate;
-      //   })
-      //   .catch(err => {
-      //     return Promise.reject(err);
-      //   });
-      request.get('/home/productCateList/0').then((res) => {
-        const { code, data } = res
-        if (code === 200) {
-          const val = {
-            id: 0,
-            name: "全部"
-          };
-          const cate =data;
-          cate.unshift(val);
-          this.categoryList = cate;
-        }
-      })
-    },
+    // getCategory() {
+    //   request.get('/home/productCateList/0').then((res) => {
+    //     const { code, data } = res
+    //     if (code === 200) {
+    //       const val = {
+    //         id: 0,
+    //         name: "全部"
+    //       };
+    //       const cate =data;
+    //       cate.unshift(val);
+    //       this.categoryList = cate;
+    //     }
+    //   })
+    // },
     // 向后端请求全部商品或分类商品数据
     getData() {
-      // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
-      // const api =
-      //   this.categoryID.length == 0
-      //     ? "/api/product/getAllProduct"
-      //     : "/api/product/getProductByCategory";
-      // this.$axios
-      //   .post(api, {
-      //     categoryID: this.categoryID,
-      //     currentPage: this.currentPage,
-      //     pageSize: this.pageSize
-      //   })
-      //   .then(res => {
-      //     this.product = res.data.Product;
-      //     this.total = res.data.total;
-      //   })
-      //   .catch(err => {
-      //     return Promise.reject(err);
-      //   });
-
+      console.log("xa",this.categoryID)
         const api =this.categoryID.length == 0
-          ? "/home/productCateList/0"
-          : "/home/productCateList/"+this.categoryID;
+          ? "/product/categoryGoods/0"
+          : "/product/categoryGoods/"+this.categoryID;
       
-        request.get(api).then((res) => {
-        const { code} = res
+        request.get(api,{
+        params: {
+          pageSize: 15,
+          pageNum: 1
+        }
+      }).then((res) => {
+        const { code,data} = res
         if (code === 200) {
-          
-        //  this.product = data.Product;
+          this.product = data.list;
+          this.total = data.total;
         }
       })
     },
@@ -258,6 +241,21 @@ export default {
         }
       })
     },
+    //获取树结构分类商品
+     getAllCateGoods() {
+      request.get('/product/categoryTreeList').then((res) => {
+        const { code, data } = res
+        if (code === 200) {
+          this.pcategoryList = data;
+          this.categoryList = this.pcategoryList[0]['children'];
+        }
+      })
+    },
+    childcate(index) {
+      this.pindex = index
+      console.log("tab",index);
+      this.categoryList = this.pcategoryList[index]['children'];
+    }
   }
 };
 </script>
@@ -320,4 +318,11 @@ export default {
   margin-left: 13.7px;
 }
 /* 主要内容区CSS END */
+.parentcate .eltag{
+  margin-right:10px;
+}
+.parentcate .active {
+  color: #409eff;
+  border: 1px solid #d9ecff;
+}
 </style>
