@@ -1,9 +1,7 @@
 <!--
  * @Description: 我的订单页面组件
- * @Author: hai-27
- * @Date: 2020-02-20 17:21:54
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 13:36:27
+ * @Author: leixiaotian
+ * @Date: 2021-02-04 17:21:54
  -->
 <template>
   <div class="order">
@@ -24,8 +22,8 @@
         <ul>
           <!-- 我的订单表头 -->
           <li class="order-info">
-            <div class="order-id">订单编号: {{item[0].order_id}}</div>
-            <div class="order-time">订单时间: {{item[0].order_time | dateFormat}}</div>
+            <div class="order-id">订单编号: {{item.orderSn}}</div>
+            <div class="order-time">订单时间: {{item.createTime | dateFormat}}</div>
           </li>
           <li class="header">
             <div class="pro-img"></div>
@@ -37,20 +35,20 @@
           <!-- 我的订单表头END -->
 
           <!-- 订单列表 -->
-          <li class="product-list" v-for="(product,i) in item" :key="i">
+          <li class="product-list" v-for="(product,i) in item.orderItemList" :key="i">
             <div class="pro-img">
-              <router-link :to="{ path: '/goods/details', query: {productID:product.product_id} }">
-                <img :src="$target + product.product_picture" />
+              <router-link :to="{ path: '/goods/details', query: {productID:product.productId} }">
+                <img :src="product.productPic" />
               </router-link>
             </div>
             <div class="pro-name">
               <router-link
-                :to="{ path: '/goods/details', query: {productID:product.product_id} }"
-              >{{product.product_name}}</router-link>
+                :to="{ path: '/goods/details', query: {productID:product.productId} }"
+              >{{product.productName}}</router-link>
             </div>
-            <div class="pro-price">{{product.product_price}}元</div>
-            <div class="pro-num">{{product.product_num}}</div>
-            <div class="pro-total pro-total-in">{{product.product_price*product.product_num}}元</div>
+            <div class="pro-price">{{product.productPrice}}元</div>
+            <div class="pro-num">{{product.productQuantity}}</div>
+            <div class="pro-total pro-total-in">{{product.productPrice*product.productQuantity}}元</div>
           </li>
         </ul>
         <div class="order-bar">
@@ -69,7 +67,18 @@
           <!-- 订单列表END -->
         </div>
       </div>
-      <div style="margin-top:-40px;"></div>
+      <!-- <div style="margin-top:-40px;"></div> -->
+      <!-- 分页 -->
+      <div class="pagination">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="pageTotal"
+          @current-change="currentChange"
+        ></el-pagination>
+      </div>
+      <!-- 分页END -->
     </div>
     <!-- 我的订单主要内容END -->
 
@@ -84,48 +93,106 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 export default {
   data() {
     return {
       orders: [], // 订单列表
-      total: [] // 每个订单的商品数量及总价列表
+      total: [], // 每个订单的商品数量及总价列表
+      pageTotal: 0, //分页总数
+      pageSize: 10, // 每页显示的商品数量
+      currentPage: 1, //当前页码
     };
   },
   activated() {
     // 获取订单数据
-    this.$axios
-      .post("/api/user/order/getOrder", {
-        user_id: this.$store.getters.getUser.user_id
-      })
-      .then(res => {
-        if (res.data.code === "001") {
-          this.orders = res.data.orders;
-        } else {
-          this.notifyError(res.data.msg);
+    // this.$axios
+    //   .post("/api/user/order/getOrder", {
+    //     user_id: this.$store.getters.getUser.user_id
+    //   })
+    //   .then(res => {
+    //     if (res.data.code === "001") {
+    //       this.orders = res.data.orders;
+    //     } else {
+    //       this.notifyError(res.data.msg);
+    //     }
+    //   })
+    //   .catch(err => {
+    //     return Promise.reject(err);
+    //   });
+
+      const params = {
+        params: {
+          status: -1,
+          pageSize: this.pageSize,
+          pageNum: this.currentPage
+        }
+      }
+      request.get('order/list', params).then((res) => {
+        const { code, data, message } = res
+        if (code === 200) {
+          this.orders = data.list;
+          this.pageTotal = data.total;
+        }else {
+          this.notifySucceed(message);
         }
       })
-      .catch(err => {
-        return Promise.reject(err);
-      });
   },
   watch: {
     // 通过订单信息，计算出每个订单的商品数量及总价
     orders: function(val) {
+      console.log("varxxxxx",val)
       let total = [];
       for (let i = 0; i < val.length; i++) {
         const element = val[i];
 
         let totalNum = 0;
         let totalPrice = 0;
-        for (let j = 0; j < element.length; j++) {
-          const temp = element[j];
-          totalNum += temp.product_num;
-          totalPrice += temp.product_price * temp.product_num;
+        for (let j = 0; j < element.orderItemList.length; j++) {
+          const temp = element.orderItemList[j];
+          totalNum += temp.productQuantity;
+          totalPrice += temp.productPrice * temp.productQuantity;
         }
         total.push({ totalNum, totalPrice });
       }
       this.total = total;
     }
+  },
+  methods: {
+    // 返回顶部
+    backtop() {
+      const timer = setInterval(function() {
+        const top = document.documentElement.scrollTop || document.body.scrollTop;
+        const speed = Math.floor(-top / 5);
+        document.documentElement.scrollTop = document.body.scrollTop =
+          top + speed;
+
+        if (top === 0) {
+          clearInterval(timer);
+        }
+      }, 20);
+    },
+    // 页码变化调用currentChange方法
+    currentChange(currentPage) {
+      const params = {
+        params: {
+          status: -1,
+          pageSize: this.pageSize,
+          pageNum: currentPage
+        }
+      }
+      request.get('order/list', params).then((res) => {
+        const { code, data, message } = res
+        if (code === 200) {
+          this.orders = data.list;
+          this.pageTotal = data.total;
+        }else {
+          this.notifySucceed(message);
+        }
+      })
+      
+      this.backtop();
+    },
   }
 };
 </script>
@@ -207,6 +274,9 @@ export default {
 .order .content ul .pro-name {
   float: left;
   width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .order .content ul .pro-name a {
   color: #424242;
@@ -287,4 +357,8 @@ export default {
   font-size: 20px;
 }
 /* 订单为空的时候显示的内容CSS END */
+.pagination {
+  /* height: 50px; */
+  text-align: center;
+}
 </style>
