@@ -1,9 +1,7 @@
 <!--
  * @Description: 确认订单页面组件
- * @Author: hai-27
- * @Date: 2020-02-23 23:46:39
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-29 13:10:21
+ * @Author: leixiaotian
+ * @Date: 2021-02-04 23:46:39
  -->
 <template>
   <div class="confirmOrder">
@@ -198,7 +196,11 @@ export default {
     },
     getCheckData() {
       console.log("checkdata",this.getCheckGoods)
-      request.post('order/generateConfirmOrder', [26,27]).then((res) => {
+      let ids = this.getCheckGoods.map(item => {
+        return item.id
+      })
+      console.log("ids",ids)
+      request.post('order/generateConfirmOrder', ids).then((res) => {
         const { code, data } = res
         if (code === 200) {
           this.address = data.memberReceiveAddressList;
