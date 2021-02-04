@@ -58,6 +58,7 @@ export default {
           checkGoods.push(temp);
         }
       }
+      console.log("getCheckGoods",checkGoods)
       return checkGoods;
     },
     getCheckNum (state) {

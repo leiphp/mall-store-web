@@ -32,8 +32,9 @@
               :key="item.id"
             >
               <h2>{{item.name}}</h2>
-              <p class="phone">{{item.phone}}</p>
-              <p class="address">{{item.address}}</p>
+              <p class="phone">{{item.phoneNumber}}</p>
+              <p class="address">{{item.province}}{{item.city}}{{item.region}}{{item.detailAddress}}</p>
+              <p class="phone">{{item.postCode}}</p>
             </li>
             <li class="add-address">
               <i class="el-icon-circle-plus-outline"></i>
@@ -125,6 +126,7 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 export default {
@@ -156,6 +158,7 @@ export default {
       this.notifyError("请勾选商品后再结算");
       this.$router.push({ path: "/shoppingCart" });
     }
+    this.getCheckData()
   },
   computed: {
     // 结算的商品数量; 结算商品总计; 结算商品信息
@@ -192,6 +195,17 @@ export default {
         .catch(err => {
           return Promise.reject(err);
         });
+    },
+    getCheckData() {
+      console.log("checkdata",this.getCheckGoods)
+      request.post('order/generateConfirmOrder', [26,27]).then((res) => {
+        const { code, data } = res
+        if (code === 200) {
+          this.address = data.memberReceiveAddressList;
+          this.total = data.total;
+         console.log("data is:",data)
+        }
+      })
     }
   }
 };
@@ -248,7 +262,7 @@ export default {
 .confirmOrder .content .address-body li {
   float: left;
   color: #333;
-  width: 220px;
+  width: 215px;
   height: 178px;
   border: 1px solid #e0e0e0;
   padding: 15px 24px 0;
