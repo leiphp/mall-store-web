@@ -165,34 +165,54 @@ export default {
   methods: {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
-      this.$axios
-        .post("/api/user/order/addOrder", {
-          user_id: this.$store.getters.getUser.user_id,
-          products: this.getCheckGoods
-        })
-        .then(res => {
-          let products = this.getCheckGoods;
-          switch (res.data.code) {
-            // “001”代表结算成功
-            case "001":
-              for (let i = 0; i < products.length; i++) {
-                const temp = products[i];
-                // 删除已经结算的购物车商品
-                this.deleteShoppingCart(temp.id);
-              }
-              // 提示结算结果
-              this.notifySucceed(res.data.msg);
-              // 跳转我的订单页面
-              this.$router.push({ path: "/order" });
-              break;
-            default:
-              // 提示失败信息
-              this.notifyError(res.data.msg);
-          }
-        })
-        .catch(err => {
-          return Promise.reject(err);
-        });
+      // this.$axios
+      //   .post("/api/user/order/addOrder", {
+      //     user_id: this.$store.getters.getUser.user_id,
+      //     products: this.getCheckGoods
+      //   })
+      //   .then(res => {
+      //     let products = this.getCheckGoods;
+      //     switch (res.data.code) {
+      //       // “001”代表结算成功
+      //       case "001":
+      //         for (let i = 0; i < products.length; i++) {
+      //           const temp = products[i];
+      //           // 删除已经结算的购物车商品
+      //           this.deleteShoppingCart(temp.id);
+      //         }
+      //         // 提示结算结果
+      //         this.notifySucceed(res.data.msg);
+      //         // 跳转我的订单页面
+      //         this.$router.push({ path: "/order" });
+      //         break;
+      //       default:
+      //         // 提示失败信息
+      //         this.notifyError(res.data.msg);
+      //     }
+      //   })
+      //   .catch(err => {
+      //     return Promise.reject(err);
+      //   });
+      let ids = this.getCheckGoods.map(item => {
+        return item.id
+      })
+      const params = {
+        memberReceiveAddressId: 1,
+        payType: 1,
+        cartIds: ids,
+      }
+      request.post('order/generateOrder', params).then((res) => {
+        const { code, data, message } = res
+        if (code === 200) {
+          // 提示结算结果
+          this.notifySucceed(message);
+          //发起支付
+         console.log("orderdata is:",data.order)
+        }else {
+          this.notifySucceed(message);
+          console.log("orderdata is:","失败处理")
+        }
+      })
     },
     getCheckData() {
       console.log("checkdata",this.getCheckGoods)
