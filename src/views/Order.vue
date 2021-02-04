@@ -141,7 +141,6 @@ export default {
   watch: {
     // 通过订单信息，计算出每个订单的商品数量及总价
     orders: function(val) {
-      console.log("varxxxxx",val)
       let total = [];
       for (let i = 0; i < val.length; i++) {
         const element = val[i];
