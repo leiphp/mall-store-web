@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import md5 from 'crypto-js/md5';
 
 // 创建axios实例
 const service = axios.create({
@@ -10,13 +11,28 @@ const service = axios.create({
   timeout: 15000 // 请求超时时间
 })
 
+const guid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+  // eslint-disable-next-line
+  const r = Math.random() * 16 | 0;
+  // eslint-disable-next-line
+  const v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return v.toString(16);
+});
+
 // request拦截器
 service.interceptors.request.use(config => {
-  // console.log("token",store.getters.token)
-  // console.log("getUser",store.getters.getUser)
-  // console.log("getToken",getToken())
+  
+  const nonce = guid();
+  const timestamp = Date.now();
+
   if (store.getters.getUser) {
-    config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    // config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.headers=Object.assign(config.headers,{
+      Authorization:getToken(), // 让每个请求携带自定义token 请根据实际情况自行修改
+      nonce,
+      timestamp,
+      sign: String(md5(timestamp + nonce))
+    })
   }
   return config
 }, error => {
