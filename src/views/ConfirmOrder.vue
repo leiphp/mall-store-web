@@ -209,6 +209,7 @@ export default {
           this.notifySucceed(message);
           //发起支付
           const params = {
+            orderId: data.order.id,
             orderSn: data.order.orderSn,
             productName: data.orderItemList[0].productName,
             amount: data.order.payAmount,
