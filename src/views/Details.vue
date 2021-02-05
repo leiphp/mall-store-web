@@ -70,7 +70,7 @@
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
-          <el-button class="shop-buy" :disabled="dis" @click="addShoppingBuy">立即购买</el-button>
+          <!-- <el-button class="shop-buy" :disabled="dis" @click="addShoppingBuy">立即购买</el-button> -->
           <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button>
           <el-button class="like" @click="addCollect">喜欢</el-button>
         </div>
@@ -276,7 +276,7 @@ export default {
         .catch(err => {
           return Promise.reject(err);
         });
-    }
+    },
   }
 };
 </script>
