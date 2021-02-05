@@ -216,10 +216,8 @@ export default {
             userId: data.order.memberId,
           }
           this.thirdpay(params)
-         console.log("orderdata is:",data.order)
         }else {
           this.notifySucceed(message);
-          console.log("orderdata is:","失败处理")
         }
       })
     },
@@ -234,7 +232,6 @@ export default {
         if (code === 200) {
           this.address = data.memberReceiveAddressList;
           this.total = data.total;
-         console.log("data is:",data)
         }
       })
     },
@@ -249,7 +246,6 @@ export default {
           // this.html = data.body
         }else {
           this.notifySucceed(msg);
-        
         }
       })
     }
