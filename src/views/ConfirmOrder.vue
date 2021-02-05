@@ -125,6 +125,7 @@
 </template>
 <script>
 import request from '@/utils/request'
+import apirequest from '@/utils/apirequest'
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 export default {
@@ -207,6 +208,14 @@ export default {
           // 提示结算结果
           this.notifySucceed(message);
           //发起支付
+          const params = {
+            orderSn: data.order.orderSn,
+            productName: data.orderItemList[0].productName,
+            amount: data.order.payAmount,
+            remark: "备注",
+            userId: data.order.memberId,
+          }
+          this.thirdpay(params)
          console.log("orderdata is:",data.order)
         }else {
           this.notifySucceed(message);
@@ -226,6 +235,21 @@ export default {
           this.address = data.memberReceiveAddressList;
           this.total = data.total;
          console.log("data is:",data)
+        }
+      })
+    },
+    thirdpay(params) {
+      apirequest.post('apipay/alipay', params).then((res) => {
+        const { code, data, msg } = res
+        if (code === 200) {
+          // 异步跳转支付,返回参数 
+          let routerData = this.$router.resolve({path:'/gopay/alipay',query:{htmls:data.body}})
+          //打开新页面
+          window.open(routerData.href,'_ blank')
+          // this.html = data.body
+        }else {
+          this.notifySucceed(msg);
+        
         }
       })
     }

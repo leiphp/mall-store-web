@@ -120,7 +120,8 @@ export default {
       dis: false, // 控制“加入购物车按钮是否可用”
       productID: "", // 商品id
       productDetails: "", // 商品详细信息
-      productPicture: "" // 商品图片
+      productPicture: "", // 商品图片
+      skuStockList: [] //sku库存
     };
   },
   // 通过路由获取商品id
@@ -171,6 +172,7 @@ export default {
         if (code === 200) {
           this.productDetails = res.data.product;
           this.productPicture = res.data.product.albumPics.split(',')
+          this.skuStockList = res.data.skuStockList
           // console.log("piclist",this.productPicture)// ["1", "2"]
           // this.product = data;
           // this.total = data.length;
@@ -191,13 +193,13 @@ export default {
       const params = {
         memberId: 1,
         productId: this.productDetails.id,
-        productSkuId: 10,
+        productSkuId: this.skuStockList[0].id,
         quantity: 1,
         price: this.productDetails.price,
         productPic: this.productDetails.pic,
         productName: this.productDetails.name,
         productSubTitle: this.productDetails.subTitle,
-        productSkuCode: "202002210036001",
+        productSkuCode: this.skuStockList[0].skuCode,
         productSn: this.productDetails.productSn,
       }
       request.post('/cart/add', params).then((res) => {
@@ -345,6 +347,9 @@ export default {
   font-size: 24px;
   font-weight: normal;
   color: #212121;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #details .main .content .intro {
   color: #b0b0b0;

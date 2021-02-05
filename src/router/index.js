@@ -48,6 +48,11 @@ const routes = [
     component: () => import('../views/Details.vue')
   },
   {
+    path: '/gopay/alipay',
+    name: 'Alipay',
+    component: () => import('../views/Alipay.vue')
+  },
+  {
     path: '/shoppingCart',
     name: 'ShoppingCart',
     component: () => import('../views/ShoppingCart.vue'),
