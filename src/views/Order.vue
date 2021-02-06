@@ -12,6 +12,17 @@
           <i class="el-icon-s-order" style="font-size: 30px;color: #ff6700;"></i>
           我的订单
         </p>
+        <div class="cate">
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+              <el-tab-pane label="全部" name="-1"></el-tab-pane>
+              <el-tab-pane label="待付款" name="0"></el-tab-pane>
+              <el-tab-pane label="待发货" name="1"></el-tab-pane>
+              <el-tab-pane label="已发货" name="2"></el-tab-pane>
+              <el-tab-pane label="已完成" name="3"></el-tab-pane>
+              <el-tab-pane label="已关闭" name="4"></el-tab-pane>
+          </el-tabs>
+        </div>
+        <div class="total">共{{pageTotal}}单</div>
       </div>
     </div>
     <!-- 我的订单头部END -->
@@ -26,7 +37,11 @@
             <div class="order-time">订单时间: {{item.createTime | dateFormat}}</div>
           </li>
           <li class="header">
-            <div class="pro-img"></div>
+            <div class="pro-img">
+              <el-tag effect="plain" :type="item.status | statusFilter">
+              {{ item.status | showFilter }}
+            </el-tag>
+            </div>
             <div class="pro-name">商品名称</div>
             <div class="pro-price">单价</div>
             <div class="pro-num">数量</div>
@@ -95,6 +110,30 @@
 <script>
 import request from '@/utils/request'
 export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        0: 'warning',
+        1: 'success',
+        2: '',
+        3: 'info',
+        4: 'info',
+        5: 'danger',
+      }
+      return statusMap[status]
+    },
+    showFilter(show) {
+      const showMap = {
+        0: '待付款',
+        1: '待发货',
+        2: '已发货',
+        3: '已完成',
+        4: '已关闭',
+        5: '无效订单',
+      }
+      return showMap[show]
+    },
+  },
   data() {
     return {
       orders: [], // 订单列表
@@ -102,6 +141,8 @@ export default {
       pageTotal: 0, //分页总数
       pageSize: 10, // 每页显示的商品数量
       currentPage: 1, //当前页码
+      activeName: '-1', //tab显示
+      cateId: -1
     };
   },
   activated() {
@@ -175,7 +216,7 @@ export default {
     currentChange(currentPage) {
       const params = {
         params: {
-          status: -1,
+          status: this.cateId,
           pageSize: this.pageSize,
           pageNum: currentPage
         }
@@ -192,6 +233,31 @@ export default {
       
       this.backtop();
     },
+    handleClick(tab, event) {
+      console.log(tab, event);
+      this.cateId = tab.name
+      const params = {
+        params: {
+          status: this.cateId,
+          pageSize: this.pageSize,
+          pageNum: this.currentPage
+        }
+      }
+      request.get('order/list', params).then((res) => {
+        const { code, data, message } = res
+        if (code === 200) {
+          if (data.total >0) {
+            this.orders = data.list;
+            this.pageTotal = data.total;
+          }else {
+            this.orders = [];
+            this.pageTotal = data.total;
+          }
+        }else {
+          this.notifySucceed(message);
+        }
+      })
+    }
   }
 };
 </script>
@@ -217,6 +283,20 @@ export default {
   float: left;
   font-weight: normal;
   color: #424242;
+}
+.order .order-header .cate {
+  /* border: 1px solid red; */
+  /* width: 34%; */
+  float: left;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.order .order-header .total {
+    float: right;
+    height: 38px;
+    margin-top: 10px;
+    line-height: 38px;
+    color: rgb(255, 103, 0);;
 }
 /* 我的订单头部CSS END */
 .order .content {
