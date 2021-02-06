@@ -22,6 +22,13 @@
             v-model="RegisterUser.name"
           ></el-input>
         </el-form-item>
+        <el-form-item prop="phone">
+          <el-input
+            prefix-icon="el-icon-phone"
+            placeholder="请输入手机号"
+            v-model="RegisterUser.phone"
+          ></el-input>
+        </el-form-item>
         <el-form-item prop="pass">
           <el-input
             prefix-icon="el-icon-view"
@@ -38,6 +45,15 @@
             v-model="RegisterUser.confirmPass"
           ></el-input>
         </el-form-item>
+        <el-form-item prop="code">
+          <el-input
+            prefix-icon="el-icon-s-help"
+            placeholder="请输入验证码"
+            v-model="RegisterUser.code"
+            style="width:55%;float:left;"
+          ></el-input>
+          <el-button @click="sendMsg" size="mini" style="float:right;height:40px;width:44%;">{{buttonName}}</el-button>
+        </el-form-item>
         <el-form-item>
           <el-button size="medium" type="primary" @click="Register" style="width:100%;">注册</el-button>
         </el-form-item>
@@ -46,6 +62,7 @@
   </div>
 </template>
 <script>
+import request from '@/utils/request'
 export default {
   name: "MyRegister",
   props: ["register"],
@@ -58,24 +75,8 @@ export default {
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
       const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
       if (userNameRule.test(value)) {
-        //判断数据库中是否已经存在该用户名
-        this.$axios
-          .post("/api/users/findUserName", {
-            userName: this.RegisterUser.name
-          })
-          .then(res => {
-            // “001”代表用户名不存在，可以注册
-            if (res.data.code == "001") {
-              this.$refs.ruleForm.validateField("checkPass");
-              return callback();
-            } else {
-              return callback(new Error(res.data.msg));
-            }
-          })
-          .catch(err => {
-            return Promise.reject(err);
-          });
-      } else {
+        return callback();
+      }else{
         return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
       }
     };
@@ -113,14 +114,19 @@ export default {
       RegisterUser: {
         name: "",
         pass: "",
-        confirmPass: ""
+        confirmPass: "",
+        phone: "",
+        code: ""
       },
       // 用户信息校验规则,validator(校验方法),trigger(触发方式),blur为在组件 Input 失去焦点时触发
       rules: {
         name: [{ validator: validateName, trigger: "blur" }],
         pass: [{ validator: validatePass, trigger: "blur" }],
         confirmPass: [{ validator: validateConfirmPass, trigger: "blur" }]
-      }
+      },
+      buttonName: "获取验证码",
+			isDisabled: false,
+			time: 90
     };
   },
   watch: {
@@ -140,34 +146,64 @@ export default {
   },
   methods: {
     Register() {
+      console.log(11111111111)
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始注册
+        console.log("valid",valid)
         if (valid) {
-          this.$axios
-            .post("/api/users/register", {
-              userName: this.RegisterUser.name,
-              password: this.RegisterUser.pass
-            })
-            .then(res => {
-              // “001”代表注册成功，其他的均为失败
-              if (res.data.code === "001") {
-                // 隐藏注册组件
-                this.isRegister = false;
-                // 弹出通知框提示注册成功信息
-                this.notifySucceed(res.data.msg);
-              } else {
-                // 弹出通知框提示注册失败信息
-                this.notifyError(res.data.msg);
-              }
-            })
-            .catch(err => {
-              return Promise.reject(err);
-            });
+          var params = new URLSearchParams();
+          params.append('username', this.RegisterUser.name);
+          params.append('password', this.RegisterUser.pass);
+          params.append('telephone', this.RegisterUser.phone);
+          params.append('authCode', this.RegisterUser.code);
+
+          request.post('sso/register', params).then((res) => {
+            const { code, data, message } = res
+            if (code === 200) {
+              // 隐藏注册组件
+              this.isRegister = false;
+              console.log("data",data)
+              this.notifySucceed(message);
+            }else{
+              this.notifySucceed(message);
+            }
+          })
         } else {
           return false;
         }
       });
+    },
+    //获取验证码
+    sendMsg() {
+      const params = {
+        params: {
+          telephone: this.RegisterUser.phone,
+        }
+      }
+      request.get('sso/getAuthCode', params).then((res) => {
+        const { code, data } = res
+        // this.notifySucceed(message);
+        if (code === 200) {
+          this.notifySucceed("本次验证码为："+data);
+          this.timestart()
+        }
+      })
+    },
+    //倒计时
+    timestart() {
+      let me = this;
+      me.isDisabled = true;
+      let interval = window.setInterval(function() {
+        me.buttonName = '（' + me.time + '秒）后重发';
+        --me.time;
+        if(me.time < 0) {
+          me.buttonName = "重新发送";
+          me.time = 10;
+          me.isDisabled = false;
+          window.clearInterval(interval);
+        }
+      }, 1000);
     }
   }
 };
