@@ -34,7 +34,7 @@
               <p class="address">{{item.province}}{{item.city}}{{item.region}}{{item.detailAddress}}</p>
               <p class="phone">{{item.postCode}}</p>
             </li>
-            <li class="add-address">
+            <li class="add-address" @click="addAddress()">
               <i class="el-icon-circle-plus-outline"></i>
               <p>添加新地址</p>
             </li>
@@ -121,6 +121,36 @@
       <!-- 结算导航END -->
     </div>
     <!-- 主要内容容器END -->
+    <!-- 编辑弹出框 -->
+    <el-dialog title="添加收货地址" :visible.sync="editVisible" width="28%">
+      <el-form ref="form" :model="form" label-width="50px">
+        <el-form-item label="姓名">
+          <el-input v-model="form.name" />
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="form.mobile" />
+        </el-form-item>
+        <el-form-item label="邮编">
+          <el-input v-model="form.postcode" />
+        </el-form-item>
+        <el-form-item label="省">
+          <el-input v-model="form.province" />
+        </el-form-item>
+        <el-form-item label="市">
+          <el-input v-model="form.city" />
+        </el-form-item>
+        <el-form-item label="县(区)">
+          <el-input v-model="form.region" />
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="form.detailaddress" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveAddress">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -135,20 +165,17 @@ export default {
       // 虚拟数据
       confirmAddress: 1, // 选择的地址id
       // 地址列表
-      address: [
-        {
-          id: 1,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 广州市 白云区 江高镇 广东白云学院"
-        },
-        {
-          id: 2,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 茂名市 化州市 杨梅镇 ***"
-        }
-      ]
+      address: [],
+      editVisible: false,
+      form: {
+        name: '',
+        mobile: '',
+        postcode: '',
+        province: '',
+        city: '',
+        region: '',
+        detailaddress: '',
+      },
     };
   },
   created() {
@@ -166,61 +193,38 @@ export default {
   methods: {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
-      // this.$axios
-      //   .post("/api/user/order/addOrder", {
-      //     user_id: this.$store.getters.getUser.user_id,
-      //     products: this.getCheckGoods
-      //   })
-      //   .then(res => {
-      //     let products = this.getCheckGoods;
-      //     switch (res.data.code) {
-      //       // “001”代表结算成功
-      //       case "001":
-      //         for (let i = 0; i < products.length; i++) {
-      //           const temp = products[i];
-      //           // 删除已经结算的购物车商品
-      //           this.deleteShoppingCart(temp.id);
-      //         }
-      //         // 提示结算结果
-      //         this.notifySucceed(res.data.msg);
-      //         // 跳转我的订单页面
-      //         this.$router.push({ path: "/order" });
-      //         break;
-      //       default:
-      //         // 提示失败信息
-      //         this.notifyError(res.data.msg);
-      //     }
-      //   })
-      //   .catch(err => {
-      //     return Promise.reject(err);
-      //   });
-      let ids = this.getCheckGoods.map(item => {
-        return item.id
-      })
-      const params = {
-        memberReceiveAddressId: 1,
-        payType: 1,
-        cartIds: ids,
-      }
-      request.post('order/generateOrder', params).then((res) => {
-        const { code, data, message } = res
-        if (code === 200) {
-          // 提示结算结果
-          this.notifySucceed(message);
-          //发起支付
-          const params = {
-            orderId: data.order.id,
-            orderSn: data.order.orderSn,
-            productName: data.orderItemList[0].productName,
-            amount: data.order.payAmount,
-            remark: "备注",
-            userId: data.order.memberId,
-          }
-          this.thirdpay(params)
-        }else {
-          this.notifySucceed(message);
+      //判断收货地址 
+      if (this.address.length >0 ) {
+        let ids = this.getCheckGoods.map(item => {
+          return item.id
+        })
+        const params = {
+          memberReceiveAddressId: this.address[0].id,
+          payType: 1,
+          cartIds: ids,
         }
-      })
+        request.post('order/generateOrder', params).then((res) => {
+          const { code, data, message } = res
+          if (code === 200) {
+            // 提示结算结果
+            this.notifySucceed(message);
+            //发起支付
+            const params = {
+              orderId: data.order.id,
+              orderSn: data.order.orderSn,
+              productName: data.orderItemList[0].productName,
+              amount: data.order.payAmount,
+              remark: "备注",
+              userId: data.order.memberId,
+            }
+            this.thirdpay(params)
+          }else {
+            this.notifySucceed(message);
+          }
+        })
+      }else{
+        this.notifyError("收货地址不能为空！");
+      }
     },
     getCheckData() {
       console.log("checkdata",this.getCheckGoods)
@@ -249,7 +253,42 @@ export default {
           this.notifySucceed(msg);
         }
       })
-    }
+    },
+    addAddress() {
+        this.form = {
+          name: "",
+          mobile: '',
+          postcode: '',
+          province: '',
+          city: '',
+          region: '',
+          detailaddress: '',
+        }
+      this.editVisible = true
+    },
+    // 保存地址
+    saveAddress() {
+      this.editVisible = false
+      const userObj = JSON.parse(localStorage.getItem("user"))
+      const params = {
+            memberId: userObj.user_id,
+            name: this.form.name,
+            phoneNumber: this.form.mobile,
+            postCode: this.form.postcode,
+            province: this.form.province,
+            city: this.form.city,
+            region: this.form.region,
+            detailAddress: this.form.detailaddress,
+      }
+      request.post('member/address/add', params).then((res) => {
+            const { code, message } = res
+            if (code === 200) {
+              this.notifySucceed("添加成功");
+            }else{
+              this.notifySucceed(message);
+            }
+          })
+    },
   }
 };
 </script>
