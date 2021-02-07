@@ -1,9 +1,7 @@
 <!--
  * @Description: 用户注册组件
- * @Author: hai-27
- * @Date: 2020-02-19 22:20:35
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-01 15:34:34
+ * @Author: leixiaotain
+ * @Date: 2021-02-07 11:20:35
  -->
 <template>
   <div id="register">
@@ -146,7 +144,6 @@ export default {
   },
   methods: {
     Register() {
-      console.log(11111111111)
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate(valid => {
         //如果通过校验开始注册
