@@ -119,7 +119,7 @@ export default {
       this.currentPage = 1;
       // 更新地址栏链接，方便刷新页面可以回到原来的页面
       this.$router.push({
-        path: "/recgoods",
+        path: "/goods",
         query: { categoryID: this.categoryID }
       });
     },
@@ -136,7 +136,7 @@ export default {
     },
     // 监听路由变化，更新路由传递了搜索条件
     $route: function(val) {
-      if (val.path == "/recgoods") {
+      if (val.path == "/goods") {
         if (val.query.search != undefined) {
           this.activeName = "-1";
           this.currentPage = 1;
@@ -172,7 +172,6 @@ export default {
     },
     // 向后端请求全部商品或分类商品数据
     getData() {
-      console.log("xa",this.categoryID)
         const api =this.categoryID.length == 0
           ? "/product/categoryGoods/0"
           : "/product/categoryGoods/"+this.categoryID;
